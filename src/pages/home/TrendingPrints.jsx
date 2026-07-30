@@ -1,11 +1,16 @@
+import { useContext } from 'react';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Container from '../../components/container/Container';
+import { CartContext } from "../../context/CartProvider"; // ⚠️ Adjust this path if needed
 
 const TrendingPrints = () => {
+  // Bring in the addToCart function from our global state
+  const { addToCart } = useContext(CartContext);
+
   // Mock data for smaller items in the carousel
   const prints = [
     { _id: "10", title: "Abstract Form I", price: "$150", image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&w=1000&auto=format&fit=crop" },
@@ -46,17 +51,26 @@ const TrendingPrints = () => {
             >
               {prints.map((print) => (
                 <SwiperSlide key={print._id}>
-                  <div className="group cursor-pointer bg-base-white p-3 border border-sand shadow-sm hover:shadow-md transition-shadow">
-                    <div className="aspect-square overflow-hidden mb-4">
+                  <div className="group bg-base-white p-3 border border-sand shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div className="aspect-square overflow-hidden mb-4 cursor-pointer">
                       <img 
                         src={print.image} 
                         alt={print.title} 
                         className="w-full h-full object-cover filter grayscale-[10%] group-hover:grayscale-0 transition-all duration-500"
                       />
                     </div>
-                    <div className="text-center pb-2">
+                    
+                    <div className="text-center pb-2 flex flex-col items-center">
                       <h4 className="text-sm font-semibold text-text-main">{print.title}</h4>
-                      <p className="text-xs text-olive mt-1">{print.price}</p>
+                      <p className="text-xs text-olive mt-1 mb-4">{print.price}</p>
+                      
+                      {/* ADD TO CART BUTTON */}
+                      <button 
+                        onClick={() => addToCart(print)}
+                        className="px-5 py-2 text-[10px] font-bold uppercase tracking-widest border border-sand text-text-main hover:bg-olive hover:text-white hover:border-olive transition-all rounded-sm w-full"
+                      >
+                        Add to List
+                      </button>
                     </div>
                   </div>
                 </SwiperSlide>

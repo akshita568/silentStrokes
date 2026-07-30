@@ -5,7 +5,6 @@ import { CiLocationOn, CiSquareMinus, CiSquarePlus } from 'react-icons/ci';
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { Link, useParams } from 'react-router-dom';
 import loadingAnimation from "../../assets/animation/animation.json";
-import PricingCards from '../../components/cards/PricingCards';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
 import useAuth from '../../hooks/useAuth';
 import Swal from 'sweetalert2';

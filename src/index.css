@@ -71,3 +71,8 @@
     /* Replaced 'primary' pink with 'olive' */
     @apply text-olive border border-olive rounded-md;
 }
+
+@keyframes fadeIn {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
