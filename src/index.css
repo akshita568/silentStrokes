@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        @apply scroll-smooth bg-base-white text-text-main font-sans;
+    }
+}
+
+@layer components {
+    .navbar-active .hamburger div:first-child {
+        @apply rotate-45 translate-y-1.5;
+    }
+    .navbar-active .hamburger div:last-child {
+        @apply -rotate-45 -translate-y-1;
+    }
+    .navbar-active div:first-child div:first-child div:last-child {
+        @apply block lg:flex;
+    }
+    .sideLink {
+        @apply flex items-center gap-2 hover:no-underline text-dove py-2 px-1.5 transition-colors;
+    }
+    .sideLinkActive {
+        /* Changed from hardcoded dark blue to elegant Olive */
+        @apply flex items-center gap-2 hover:no-underline bg-olive rounded-md text-white py-2 px-1.5 shadow-sm;
+    }
+    .dropdownSideBar {
+        @apply relative flex items-center gap-2 hover:no-underline rounded text-dove py-2 px-1.5 w-full;
+    }
+
+    .animate-updown {
+        animation-name: animate-updownAnim;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate-reverse;
+    }
+
+    @keyframes animate-updownAnim {
+        from { transform: translateY(-20px); }
+        to { transform: translateY(20px); }
+    }
+}
+
+.button-reciept {
+    animation-name: animate-updownAnim;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+}
+
+.custom-scroll {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+.custom-scroll::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+    /* Changed from dark blue to soft sand */
+    background: #E3D5CA;
+    border-radius: 1rem;
+    border: 1px solid #FAFAFA;
+}
+
+.active {
+    /* Replaced 'primary' pink with 'olive' */
+    @apply text-olive border border-olive rounded-md;
+}
