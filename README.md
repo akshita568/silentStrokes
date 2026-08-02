@@ -47,7 +47,7 @@ Rather than being a conventional portfolio, Silent Strokes focuses on creating a
 
 ---
 
-# 🚀 Getting Started
+# Getting Started
 
 ## 1. Clone the Repository
 
@@ -81,7 +81,7 @@ http://localhost:5173
 ```
 ---
 
-# 🎯 Design Philosophy
+# Design Philosophy
 
 The visual identity of Silent Strokes is inspired by traditional sketchbooks and artist studios.
 
@@ -126,7 +126,7 @@ Planned enhancements include:
 
 ---
 
-# 🤝 Contributing
+# Contributing
 
 Contributions, suggestions, and improvements are always welcome.
 
