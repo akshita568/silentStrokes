@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom"; // 🛑 Removed Outlet
 import Main from "../Main/Main.jsx";
 import ErrorPage from "../pages/error/ErrorPage";
 import RippleCursor from "../components/shared/RippleCursor.jsx";
@@ -18,8 +18,8 @@ import Register from "../pages/auth/register/Register";
 import Profile from "../pages/Profile/Profile";
 import ReviewForm from "../pages/Review/ReviewForm"; 
 
-// 👇 IMPORT YOUR BOUNCER FROM THE SAME FOLDER
-import AdminRouter from "./AdminRoute"; 
+// 👇 1. IMPORT YOUR NEW SECRET DASHBOARD HERE
+import StudioDashboard from "../pages/admin/StudioDashboard";
 
 const Router = createBrowserRouter([
     {
@@ -45,25 +45,15 @@ const Router = createBrowserRouter([
             { path: "/profile", element: <Profile /> }
         ],
     },
-    // 👇 YOUR SECURE ADMIN SECTION
+    // 👇 2. YOUR SECRET STUDIO DOOR
     {
-        path: "/admin",
+        path: "/studio-door",
         element: (
-            <AdminRouter>
-                <div className="min-h-screen bg-base-white p-8 md:p-12 font-sans text-text-main">
-                    <div className="max-w-6xl mx-auto">
-                        <h1 className="text-3xl font-serif mb-8 border-b border-sand pb-4">Studio Dashboard</h1>
-                        <Outlet /> 
-                    </div>
-                </div>
-            </AdminRouter>
-        ),
-        children: [
-            {
-                path: "dashboard",
-                element: <div className="text-dove text-sm">Welcome back! Fetching your recent commissions...</div>,
-            }
-        ]
+            <>
+                <RippleCursor />
+                <StudioDashboard />
+            </>
+        )
     }
 ]);
 
