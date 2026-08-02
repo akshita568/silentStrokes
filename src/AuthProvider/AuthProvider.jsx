@@ -8,7 +8,9 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { app } from "../utils/firebase.config"; 
+// 👇 Import db and Firestore functions
+import { app, db } from "../utils/firebase.config"; 
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export const AuthContext = createContext();
 
@@ -18,9 +20,32 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 1. Google Login
-  const googleLogin = () => {
-    return signInWithPopup(auth, googleProvider);
+  // 1. Google Login (UPDATED WITH FIRESTORE CHECK)
+  const googleLogin = async () => {
+    try {
+      // Trigger the Google popup
+      const result = await signInWithPopup(auth, googleProvider);
+      const loggedInUser = result.user;
+
+      // Check if this user already exists in your Firestore "users" collection
+      const userRef = doc(db, "users", loggedInUser.uid);
+      const userSnap = await getDoc(userRef);
+
+      // If they DO NOT exist, create a new profile for them
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          name: loggedInUser.displayName || "Google User",
+          email: loggedInUser.email,
+          createdAt: new Date(),
+          role: "customer"
+        });
+      }
+
+      return result;
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+      throw error;
+    }
   };
 
   // 2. Email/Password Login
@@ -38,7 +63,6 @@ export const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);

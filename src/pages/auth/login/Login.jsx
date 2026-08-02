@@ -10,21 +10,21 @@ const Login = () => {
   const [error, setError] = useState("");
   const [resetMessage, setResetMessage] = useState(""); 
   
-  // 👇 1. ADD LOADING STATES
+  // 👇 ALL LOADING STATES
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isResetting, setIsResetting] = useState(false); // New state for forgot password
   
   const { login, googleLogin } = useContext(AuthContext); 
   const navigate = useNavigate();
   const location = useLocation(); 
-
   const from = location.state?.from?.pathname || "/";
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     setResetMessage("");
-    setIsLoggingIn(true); // 👇 Start loading spinner
+    setIsLoggingIn(true); 
     
     try {
       await login(email, password);
@@ -33,14 +33,14 @@ const Login = () => {
       setError("Incorrect email or password.");
       console.error(err);
     } finally {
-      setIsLoggingIn(false); // 👇 Stop loading spinner whether it succeeds or fails
+      setIsLoggingIn(false); 
     }
   };
 
   const handleGoogleSignIn = async () => {
     setError("");
     setResetMessage("");
-    setIsGoogleLoading(true); // 👇 Start loading spinner
+    setIsGoogleLoading(true); 
     
     try {
       await googleLogin();
@@ -49,7 +49,7 @@ const Login = () => {
       setError("Google Sign-In failed. Please try again.");
       console.error(err);
     } finally {
-      setIsGoogleLoading(false); // 👇 Stop loading spinner
+      setIsGoogleLoading(false); 
     }
   };
 
@@ -62,12 +62,15 @@ const Login = () => {
       return;
     }
 
+    setIsResetting(true); // Start loading text
     try {
       await sendPasswordResetEmail(auth, email);
       setResetMessage("Password reset email sent! Please check your inbox.");
     } catch (err) {
       setError("Failed to send reset email. Make sure the email is registered.");
       console.error(err);
+    } finally {
+      setIsResetting(false); // Stop loading text
     }
   };
 
@@ -108,18 +111,22 @@ const Login = () => {
           </div>
 
           <div className="flex justify-end">
-            <button type="button" onClick={handleForgotPassword} className="text-xs text-dove hover:text-olive transition-colors cursor-pointer">
-              Forgot Password?
+            <button 
+              type="button" 
+              onClick={handleForgotPassword} 
+              disabled={isResetting}
+              className="text-xs text-dove hover:text-olive transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isResetting ? "Sending Link..." : "Forgot Password?"}
             </button>
           </div>
 
-          {/* 👇 2. UPDATE THE SUBMIT BUTTON TO SHOW LOADING STATE */}
           <button 
             type="submit" 
             disabled={isLoggingIn}
-            className="w-full py-4 mt-8 bg-text-main text-base-white text-xs font-bold uppercase tracking-widest hover:bg-olive transition-colors duration-300 rounded-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-4 mt-8 bg-text-main text-base-white text-xs font-bold uppercase tracking-widest hover:bg-olive transition-colors duration-300 rounded-sm cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            {isLoggingIn ? "Logging in..." : "Log In"}
+            {isLoggingIn ? "Verifying Credentials..." : "Log In"}
           </button>
         </form>
 
@@ -129,12 +136,11 @@ const Login = () => {
           <div className="h-px bg-sand flex-1"></div>
         </div>
 
-        {/* 👇 3. UPDATE THE GOOGLE BUTTON TO SHOW LOADING STATE */}
         <button 
           onClick={handleGoogleSignIn}
           type="button" 
           disabled={isGoogleLoading}
-          className="w-full py-4 bg-transparent border border-sand text-text-main text-xs font-bold uppercase tracking-widest hover:border-olive hover:text-olive transition-colors duration-300 rounded-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-4 bg-transparent border border-sand text-text-main text-xs font-bold uppercase tracking-widest hover:border-olive hover:text-olive transition-colors duration-300 rounded-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {isGoogleLoading ? (
             "Connecting to Google..."
