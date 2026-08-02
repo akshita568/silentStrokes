@@ -1,34 +1,48 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import useAuth from "../../hooks/useAuth";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { db } from "../../utils/firebase.config";
 
 const Contact = () => {
   const { user } = useAuth();
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
-  const axiosPublic = useAxiosPublic();
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
       toast.error("Please log in to send a message.");
       return;
     }
-    
-    const info = { email, subject, message };
-    
-    axiosPublic.post('/contact', info).then(res => {
+
+    setLoading(true);
+
+    try {
+      // Directly write the inquiry to your Firebase Firestore database
+      await addDoc(collection(db, "inquiries"), {
+        userId: user.uid || "anonymous",
+        email: email || user.email,
+        subject,
+        message,
+        createdAt: serverTimestamp(),
+        status: "pending"
+      });
+
       toast.success("Message sent successfully!");
       // Clear form after successful submission
       setEmail("");
       setSubject("");
       setMessage("");
-    }).catch(() => {
-      toast.error("Failed to send message. Please try again.");
-    });
+    } catch (error) {
+      console.error("Error writing inquiry to Firestore:", error);
+      toast.error("Failed to send message. Please check your connection.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -131,9 +145,10 @@ const Contact = () => {
 
               <button
                 type="submit"
-                className="mt-4 self-start bg-olive text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-olive/90 hover:shadow-md transition-all flex items-center gap-3"
+                disabled={loading}
+                className="mt-4 self-start bg-olive text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-olive/90 hover:shadow-md transition-all flex items-center gap-3 disabled:opacity-50 cursor-pointer"
               >
-                Send Inquiry <AiOutlineArrowRight size={16} />
+                {loading ? "Sending..." : "Send Inquiry"} <AiOutlineArrowRight size={16} />
               </button>
             </form>
           </div>

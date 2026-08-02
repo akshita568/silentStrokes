@@ -14,7 +14,6 @@ const uploadImage = async (file) => {
         const imageUrl = await getDownloadURL(fileRef.ref);
         return imageUrl;
     } catch (error) {
-        //console.log(error);
         throw error;
     }
 };

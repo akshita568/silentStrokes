@@ -8,7 +8,7 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { app } from "../utils/firebase.config"; // ⚠️ Ensure this path is correct
+import { app } from "../utils/firebase.config"; 
 
 export const AuthContext = createContext();
 
@@ -38,8 +38,7 @@ export const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  // 5. THE MAGIC LISTENER: This watches Firebase constantly. 
-  // If a user logs in (Google OR Email), this instantly updates your whole app!
+  
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);

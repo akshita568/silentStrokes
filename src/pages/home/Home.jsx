@@ -1,25 +1,27 @@
- 
 import HeroSlider from "./heroSlider/HeroSlider"; 
-import FeaturedArtworks from "./FeaturedArtworks"; 
-import TrendingPrints from "./TrendingPrints"; 
-import AllServices from "../bookings/allServices/AllServices";
+import StudioProcess from "./StudioProcess"; 
+import BespokeCommissions from "./BespokeCommissions"; 
+import DoodleFrame from "../../components/DoodleFrame"; // Adjust path if needed
 
 const Home = () => {
   return (
-    <div className="bg-base-white min-h-screen">
-      {/* 1. The grand entrance */}
+    <div className="bg-base-white min-h-screen pb-24">
+      {/* 1. The grand interactive entrance */}
       <HeroSlider />
 
-      {/* 2. Top-tier original pieces (CSS Grid) */}
-      <FeaturedArtworks />
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 mt-20 space-y-20">
+        
+        {/* 2. Interactive Process Showcase inside the beautiful frame */}
+        <DoodleFrame>
+          <StudioProcess />
+        </DoodleFrame>
 
-
-      {/* 4. Swiper Carousel for smaller prints/sketches */}
-      <TrendingPrints />
-
-      {/* 5. Studio Services (Replacing the old Booking section) */}
-      <AllServices />
-      
+        {/* 3. The Core Business inside the beautiful frame */}
+        <DoodleFrame>
+          <BespokeCommissions />
+        </DoodleFrame>
+        
+      </div>
     </div>
   );
 };

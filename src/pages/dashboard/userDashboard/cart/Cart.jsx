@@ -1,251 +1,73 @@
-// const Cart = () => {
-//   return (
-//     <div>
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import Container from '../../components/container/Container';
+import { CartContext } from '../../context/CartProvider';
 
-//       <h2 className="text-center text-primary text-2xl font-semibold">My Orders</h2>
-
-//     </div>
-//   );
-// };
-
-// export default Cart;
-
-import { useQuery } from "@tanstack/react-query";
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { useMemo, useState } from "react";
-// import { Link } from "react-router-dom";
-// import Swal from "sweetalert2";
-import useAxios from "../../../../hooks/useAxios";
-import useAuth from "../../../../hooks/useAuth";
-
-const Cart = () => {
-  const axios = useAxios();
-  const { user } = useAuth();
-
-  const { data: products = [], refetch } = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => {
-      const response = await axios.get("/product-orders");
-      return response.data;
-    },
-  });
-  const [sorting, setSorting] = useState([]);
-  const [filtering, setFiltering] = useState("");
-
-
-  // Filter products based on user_email
-  const filteredProducts = useMemo(() => {
-    return products.filter(product => product.user_email === user.email);
-  }, [products, user.email]);
-
-  // const data = useMemo(() => products, [products]);
-
-  const data = useMemo(() => filteredProducts, [filteredProducts]);
-
-  const columns = [
-    {
-      header: "Product Image",
-      accessorKey: "product_image",
-      cell: ({ cell: { row } }) => (
-        <>
-          <img className="w-36 rounded-lg" src={row.original.product_image} />
-        </>
-      ),
-    },
-    {
-      header: "Product Name",
-      accessorKey: "product_name",
-    },
-
-    {
-      header: "Product Price",
-      accessorKey: "product_price",
-    },
-
-    {
-      header: "Status",
-      accessorKey: "status",
-    },
-
-    {
-      header: "Messages",
-      accessorKey: "_id",
-      cell: ({ cell: { row } }) => (
-        <button
-          // onClick={() => handleDelete(row.original._id)}
-          className="text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 "
-        >
-          Your product will be delivered soon.
-        </button>
-      ),
-    },
-    // {
-    //   header: "Action",
-    //   accessorKey: "_id",
-    //   cell: ({ cell: { row } }) => (
-    //     <button
-    //       // onClick={() => handleDelete(row.original._id)}
-    //       className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 "
-    //     >
-    //       Cancel Order
-    //     </button>
-    //   ),
-    // },
-  ];
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    state: {
-      sorting: sorting,
-      globalFilter: filtering,
-    },
-    onSortingChange: setSorting,
-    onGlobalFilterChange: setFiltering,
-  });
-
-  // const handleDelete = async (id) => {
-  //     try {
-  //         const swalConfirm = await Swal.fire({
-  //             title: "Are you sure?",
-  //             text: "You won't be able to revert this!",
-  //             icon: "warning",
-  //             showCancelButton: true,
-  //             confirmButtonColor: "#3085d6",
-  //             cancelButtonColor: "#d33",
-  //             confirmButtonText: "Yes, delete it!",
-  //         });
-  //         if (swalConfirm.isConfirmed) {
-  //             const response  = await axios.delete(`/delete-user/${id}`);
-  //             //console.log(response);
-  //             refetch();
-  //             Swal.fire({
-  //                 title: "Deleted!",
-  //                 text: "Your Camp has been deleted.",
-  //                 icon: "success",
-  //             });
-  //         }
-  //     } catch (error) {
-  //         //console.log(error);
-  //     }
-  // };
+export default function Cart() {
+  const cartContext = useContext(CartContext) || {};
+  const cart = cartContext.cart || [];
+  const removeFromCart = cartContext.removeFromCart || (() => {});
 
   return (
-    <>
-      <div>
-        <div className="flex justify-between items-center py-2">
-          <h3 className="font-Quicksand text-primary text-2xl font-bold">
-            My Orders
-          </h3>
-          <div className="block relative">
-            <input
-              placeholder="Search"
-              value={filtering}
-              onChange={(e) => setFiltering(e.target.value)}
-              className="p-2 w-full border bg-rose-50/60 text-primary dark:bg-rose-100 border-primary/20 rounded-md focus:border-primary/20 outline-none transition-colors duration-300"
-            />
+    <div className="min-h-screen bg-base-white text-text-main font-sans pb-32 pt-24">
+      <Container>
+        <div className="max-w-3xl mx-auto">
+          <div className="border-b border-sand pb-6 mb-12 flex justify-between items-end">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-widest text-olive mb-2 block">Collector Space</span>
+              <h1 className="text-3xl md:text-4xl font-serif text-text-main">Inquiry Vault</h1>
+            </div>
+            <span className="text-sm text-dove">{cart.length} {cart.length === 1 ? 'item' : 'items'} saved</span>
           </div>
-        </div>
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-rose-50 dark:bg-gray-700 dark:text-gray-400">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th
-                      scope="col"
-                      key={header.id}
-                      onClick={header.column.getToggleSortingHandler()}
-                      className="px-6 py-3"
-                    >
-                      {header.isPlaceholder ? null : (
-                        <div>
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          {
-                            {
-                              asc: "🔼",
-                              desc: "🔽",
-                            }[header.column.getIsSorted() ?? null]
-                          }
-                        </div>
-                      )}
-                    </th>
-                  ))}
-                </tr>
+
+          {cart.length === 0 ? (
+            <div className="text-center py-24 bg-sand/10 rounded-sm border border-sand">
+              <p className="text-dove font-serif italic mb-6">Your vault is currently empty.</p>
+              <Link 
+                to="/shop" 
+                className="inline-block px-6 py-3 bg-text-main text-base-white text-[10px] font-bold uppercase tracking-widest hover:bg-olive transition-colors"
+              >
+                Explore Services
+              </Link>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {cart.map((item) => (
+                <div key={item._id || item.id} className="bg-sand/10 p-6 rounded-sm border border-sand flex items-center justify-between gap-6 shadow-sm">
+                  <div className="flex items-center gap-6">
+                    <div className="w-20 h-20 bg-base-white overflow-hidden border border-sand shrink-0">
+                      <img src={item.image || item.src} alt={item.title} className="w-full h-full object-cover" />
+                    </div>
+                    <div>
+                      <h3 className="font-serif text-lg text-text-main">{item.title}</h3>
+                      <p className="text-xs text-olive uppercase tracking-widest mt-1">{item.category || item.price || "Custom Commission"}</p>
+                    </div>
+                  </div>
+
+                  <button 
+                    onClick={() => removeFromCart(item._id || item.id)}
+                    className="text-xs text-dove hover:text-text-main uppercase tracking-widest underline underline-offset-4 cursor-pointer"
+                  >
+                    Remove
+                  </button>
+                </div>
               ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                // here only map those items which are matched on user_email with user.email, here user.email is from useAuth
-                <tr
-                  key={row.id}
-                  className="bg-white border-b dark:bg-primary dark:border-rose-700"
+
+              <div className="pt-8 border-t border-sand flex flex-col sm:flex-row justify-between items-center gap-6">
+                <p className="text-sm text-dove font-serif italic">
+                  Ready to move forward with your saved brief?
+                </p>
+                <Link 
+                  to="/contact" 
+                  className="px-8 py-4 bg-text-main text-base-white text-xs font-bold uppercase tracking-widest hover:bg-olive transition-colors shadow-sm"
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-6 py-4">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  Submit Official Brief →
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
-
-
-        {/* pagination  */}
-        <div className="flex flex-col items-center py-5">
-          <div className="inline-flex mt-2 xs:mt-0">
-            <button
-              className="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-primary rounded-s hover:bg-rose-900 dark:bg-primary dark:border-rose-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              onClick={() => table.setPageIndex(0)}
-            >
-              First
-            </button>
-            <button
-              className="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-primary border-0 hover:bg-rose-900 dark:bg-primary dark:border-rose-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              disabled={!table.getCanPreviousPage()}
-              onClick={() => table.previousPage()}
-            >
-              Prev
-            </button>
-            <button
-              className="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-primary border-0 border-rose-700 hover:bg-rose-900 dark:bg-primary dark:border-rose-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              disabled={!table.getCanNextPage()}
-              onClick={() => table.nextPage()}
-            >
-              Next
-            </button>
-            <button
-              className="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-primary border-0 border-rose-700 rounded-e hover:bg-rose-900 dark:bg-primary dark:border-rose-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            >
-              Last
-            </button>
-          </div>
-        </div>
-        {/* pagination end */}
-
-
-      </div>
-    </>
+      </Container>
+    </div>
   );
-};
-
-export default Cart;
+}

@@ -1,17 +1,23 @@
-import { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useContext } from "react"; // 🛑 Removed useEffect from here
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../../AuthProvider/AuthProvider"; 
-import { sendPasswordResetEmail } from "firebase/auth"; // <-- NEW IMPORT
-import { auth } from "../../../utils/firebase.config"; // <-- NEW IMPORT (Ensure this path matches your project)
+import { sendPasswordResetEmail } from "firebase/auth"; 
+import { auth } from "../../../utils/firebase.config"; 
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [resetMessage, setResetMessage] = useState(""); // <-- NEW STATE FOR SUCCESS MESSAGE
+  const [resetMessage, setResetMessage] = useState(""); 
   
-  const { login, googleLogin } = useContext(AuthContext);
+  // 🛑 Removed 'user' from here, we only need the login functions
+  const { login, googleLogin } = useContext(AuthContext); 
   const navigate = useNavigate();
+  const location = useLocation(); 
+
+  const from = location.state?.from?.pathname || "/";
+
+  // 🛑 THE useEffect LOOP CAUSER HAS BEEN DELETED COMPLETELY!
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -20,7 +26,8 @@ const Login = () => {
     
     try {
       await login(email, password);
-      navigate("/"); 
+      // 👇 We put the navigate back here! It only triggers when you click the button.
+      navigate(from, { replace: true });
     } catch (err) {
       setError("Incorrect email or password.");
       console.error(err);
@@ -32,14 +39,15 @@ const Login = () => {
     setResetMessage("");
     try {
       await googleLogin();
-      navigate("/"); 
+      // 👇 We put the navigate back here too!
+      navigate(from, { replace: true });
     } catch (err) {
       setError("Google Sign-In failed. Please try again.");
       console.error(err);
     }
   };
 
-  // --- NEW FORGOT PASSWORD LOGIC ---
+  // --- FORGOT PASSWORD LOGIC ---
   const handleForgotPassword = async () => {
     setError("");
     setResetMessage("");
@@ -98,19 +106,19 @@ const Login = () => {
             <label htmlFor="password" className="absolute left-0 -top-4 text-xs font-bold uppercase tracking-widest text-dove transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-dove peer-placeholder-shown:top-2 peer-focus:-top-4 peer-focus:text-xs peer-focus:font-bold peer-focus:text-olive">Password</label>
           </div>
 
-          {/* --- NEW FORGOT PASSWORD BUTTON --- */}
+          {/* --- FORGOT PASSWORD BUTTON --- */}
           <div className="flex justify-end">
             <button 
               type="button" 
               onClick={handleForgotPassword}
-              className="text-xs text-dove hover:text-olive transition-colors"
+              className="text-xs text-dove hover:text-olive transition-colors cursor-pointer"
             >
               Forgot Password?
             </button>
           </div>
           {/* ---------------------------------- */}
 
-          <button type="submit" className="w-full py-4 mt-8 bg-text-main text-base-white text-xs font-bold uppercase tracking-widest hover:bg-olive transition-colors duration-300 rounded-sm">
+          <button type="submit" className="w-full py-4 mt-8 bg-text-main text-base-white text-xs font-bold uppercase tracking-widest hover:bg-olive transition-colors duration-300 rounded-sm cursor-pointer">
             Log In
           </button>
         </form>
@@ -124,7 +132,7 @@ const Login = () => {
         <button 
           onClick={handleGoogleSignIn}
           type="button" 
-          className="w-full py-4 bg-transparent border border-sand text-text-main text-xs font-bold uppercase tracking-widest hover:border-olive hover:text-olive transition-colors duration-300 rounded-sm flex items-center justify-center gap-2"
+          className="w-full py-4 bg-transparent border border-sand text-text-main text-xs font-bold uppercase tracking-widest hover:border-olive hover:text-olive transition-colors duration-300 rounded-sm flex items-center justify-center gap-2 cursor-pointer"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24">
             <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />

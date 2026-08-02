@@ -6,8 +6,36 @@
 
 @layer base {
     html {
-        @apply scroll-smooth bg-base-white text-text-main font-sans;
+        @apply scroll-smooth text-text-main font-sans;
     }
+}
+
+/* Base canvas texture with a light grid */
+.bg-base-white {
+    background-color: #FAFAF7;
+    background-image: linear-gradient(to right, rgba(185, 175, 160, 0.08) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(185, 175, 160, 0.08) 1px, transparent 1px);
+    background-size: 48px 48px;
+}
+
+/* Hand-drawn sketch border frame with organic corner accents */
+body::before {
+    content: "";
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    border: 1.5px dashed rgba(112, 128, 105, 0.35); /* Soft olive sketch line */
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 9999;
+    background-image: 
+        /* Organic corner flower/doodle dots */
+        radial-gradient(circle at 16px 16px, rgba(112, 128, 105, 0.5) 3px, transparent 4px),
+        radial-gradient(circle at calc(100% - 16px) 16px, rgba(112, 128, 105, 0.5) 3px, transparent 4px),
+        radial-gradient(circle at 16px calc(100% - 16px), rgba(112, 128, 105, 0.5) 3px, transparent 4px),
+        radial-gradient(circle at calc(100% - 16px) calc(100% - 16px), rgba(112, 128, 105, 0.5) 3px, transparent 4px);
 }
 
 @layer components {
@@ -24,7 +52,6 @@
         @apply flex items-center gap-2 hover:no-underline text-dove py-2 px-1.5 transition-colors;
     }
     .sideLinkActive {
-        /* Changed from hardcoded dark blue to elegant Olive */
         @apply flex items-center gap-2 hover:no-underline bg-olive rounded-md text-white py-2 px-1.5 shadow-sm;
     }
     .dropdownSideBar {
@@ -61,15 +88,44 @@
 }
 
 .custom-scroll::-webkit-scrollbar-thumb {
-    /* Changed from dark blue to soft sand */
     background: #E3D5CA;
     border-radius: 1rem;
     border: 1px solid #FAFAFA;
 }
 
 .active {
-    /* Replaced 'primary' pink with 'olive' */
     @apply text-olive border border-olive rounded-md;
+}
+
+
+/* Hand-drawn sketch frame with delicate floral corner accents for containers */
+.doodle-frame {
+    position: relative;
+    background-color: #FAFAF7;
+    border: 2px dashed rgba(112, 128, 105, 0.4); /* Soft olive sketch line */
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(185, 175, 160, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Organic corner flower/leaf flourishes */
+.doodle-frame::before,
+.doodle-frame::after {
+    content: "❀"; /* Delicate floral symbol */
+    position: absolute;
+    font-size: 14px;
+    color: #708069; /* Olive accent */
+    opacity: 0.6;
+}
+
+.doodle-frame::before {
+    top: 8px;
+    left: 12px;
+}
+
+.doodle-frame::after {
+    bottom: 8px;
+    right: 12px;
 }
 
 @keyframes fadeIn {

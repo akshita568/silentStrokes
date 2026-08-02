@@ -39,7 +39,6 @@ const Footer = () => {
                   </svg>
                 </a>
               </li>
-              
             </ul>
           </div>
           
@@ -71,6 +70,11 @@ const Footer = () => {
                     Contact Us
                   </Link>
                 </li>
+                <li onClick={scrollToTop}>
+                  <Link to="/leave-a-note" className="text-dove transition-colors hover:text-olive">
+                    Leave a review
+                  </Link>
+                </li>
               </ul>
             </div>
             
@@ -88,7 +92,6 @@ const Footer = () => {
                     artsydaisies56@gmail.com
                   </a>
                 </li>
-
                 
                 <li className="flex items-start justify-center sm:justify-start gap-3">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0 text-dove mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

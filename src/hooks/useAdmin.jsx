@@ -1,27 +1,15 @@
-import { useQuery } from '@tanstack/react-query';
 import useAuth from './useAuth';
-import useAxios from './useAxios';
 
 const useAdmin = () => {
-    const {user, isLoading} = useAuth()
-    const axios = useAxios()
+    // Check for both here as well
+    const { user, loading, isLoading } = useAuth(); 
 
-    const {data: isAdmin, isPending: isAdminPending} = useQuery({
-        queryKey:[user?.email, 'isAdmin'],
-        enabled: !isLoading && !!user?.email,
-        queryFn: async()=>{
-            const {data} = await axios.get(`/check-user-role/${user?.email}`)
-            return data.role
-        }
-    })
-    
-    if (isAdmin == "admin") {
-        const admin = true
-        return [admin,isAdminPending]
-    } else{
-        const admin = false
-        return [admin,isAdminPending]
-    }
+    if (loading || isLoading) return [false, true]; 
+
+    // Forces lowercase just in case your phone/computer auto-capitalized your email on sign up
+    const isAdmin = user?.email?.toLowerCase() === "sakshita222@gmail.com"; 
+
+    return [isAdmin, false];
 };
 
 export default useAdmin;

@@ -17,11 +17,32 @@ const HeroSlider = () => {
   };
 
   const [frames, setFrames] = useState([
-    { id: 1, img: "https://images.unsplash.com/photo-1579783902614-a3f140020184?q=80&w=1000&auto=format&fit=crop", x: 15, y: getWireY(15, 0), rot: -4, z: 10, isInspecting: false },
-    { id: 2, img: "https://images.unsplash.com/photo-1580136608260-4eb11f4b24fe?q=80&w=1000&auto=format&fit=crop", x: 32, y: getWireY(32, 1), rot: 2, z: 11, isInspecting: false },
-    { id: 3, img: "https://images.unsplash.com/photo-1578301978693-85fa9c026f19?q=80&w=1000&auto=format&fit=crop", x: 50, y: getWireY(50, 0), rot: -2, z: 12, isInspecting: false },
-    { id: 4, img: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&w=1000&auto=format&fit=crop", x: 68, y: getWireY(68, 1), rot: 3, z: 13, isInspecting: false },
-    { id: 5, img: "https://images.unsplash.com/photo-1594897030264-ab7d87efc473?q=80&w=1000&auto=format&fit=crop", x: 85, y: getWireY(85, 0), rot: -3, z: 14, isInspecting: false },
+    // 👇 SHIFTED 'x' VALUES RIGHT SO NOTHING HIDES BEHIND THE BOX ON LOAD
+    { 
+      id: 1, 
+      img: "/artworks/comission3.png", 
+      x: 35, y: getWireY(35, 0), rot: -4, z: 10, isInspecting: false 
+    },
+    { 
+      id: 2, 
+      img: "/artworks/skull.png", 
+      x: 50, y: getWireY(50, 1), rot: 2, z: 11, isInspecting: false 
+    },
+    { 
+      id: 3, 
+      img: "/artworks/dog.png", 
+      x: 65, y: getWireY(65, 0), rot: -2, z: 12, isInspecting: false 
+    },
+    { 
+      id: 4, 
+      img: "/artworks/river.png", 
+      x: 80, y: getWireY(80, 1), rot: 3, z: 13, isInspecting: false 
+    },
+    { 
+      id: 5, 
+      img: "/artworks/forest.png", 
+      x: 92, y: getWireY(92, 0), rot: -3, z: 14, isInspecting: false 
+    },
   ]);
 
   const handlePointerDown = (e, id) => {
@@ -91,15 +112,14 @@ const HeroSlider = () => {
         preserveAspectRatio="none" 
         viewBox="0 0 100 100"
       >
-        {/* Top Wire */}
         <path d="M 0 15 Q 50 55 100 20" fill="transparent" stroke="#D1CBC1" strokeWidth="0.15" />
-        {/* Bottom Wire (Safely contained inside bounds) */}
         <path d="M 0 35 Q 65 70 100 40" fill="transparent" stroke="#D1CBC1" strokeWidth="0.15" />
       </svg>
 
-      {/* 2. TEXT CONTENT */}
-      <div className="absolute left-6 md:left-16 top-24 md:top-32 z-50 pointer-events-none">
-        <div className="space-y-4 max-w-md pointer-events-auto bg-base-white/80 backdrop-blur-md p-8 border border-sand/30 shadow-2xl rounded-sm">
+      
+      <div className="absolute left-6 md:left-16 top-24 md:top-32 z-[999] pointer-events-none">
+        
+        <div className="space-y-4 max-w-md bg-base-white/80 backdrop-blur-md p-8 border border-sand/30 shadow-2xl rounded-sm">
           <span className="text-xs font-bold uppercase tracking-[0.25em] text-olive">
             The Studio Wall
           </span>
@@ -107,12 +127,13 @@ const HeroSlider = () => {
             Curate <span className="italic font-light text-dove">Your Space</span>
           </h1>
           <p className="text-dove text-sm leading-relaxed font-sans">
-            Unclip, drag, and arrange the canvases. Drop them near the wires to hang them back up, or double-click to inspect the textures closely.
+            This is an interactive space where you can drag, clip, and unclip the paintings on the wires, or simply drop them anywhere in the space to see how the prints might look on your wall.Have fun exploring, and if you'd like to see more of my work, check out my Gallery!
           </p>
           <div className="pt-2">
+            
             <Link 
               to="/portfolio" 
-              className="inline-block px-6 py-3 bg-text-main text-base-white text-[10px] font-bold uppercase tracking-widest hover:bg-olive transition-colors duration-300 rounded-sm shadow-sm"
+              className="pointer-events-auto inline-block px-6 py-3 bg-text-main text-base-white text-[10px] font-bold uppercase tracking-widest hover:bg-olive transition-colors duration-300 rounded-sm shadow-sm"
             >
               Enter Gallery
             </Link>
@@ -141,7 +162,10 @@ const HeroSlider = () => {
                 ? "translate(-50%, -50%) scale(1.6) rotate(0deg)" 
                 : `rotate(${frame.rot}deg)`,
               transformOrigin: isHung ? "top center" : "center center",
-              zIndex: frame.z,
+              
+              // 👇 Ensure inspected items pop over the text box, but dragged items stay under
+              zIndex: frame.isInspecting ? 9999 : frame.z,
+              
               width: "clamp(120px, 12vw, 220px)",
               aspectRatio: "4/5",
             }}
