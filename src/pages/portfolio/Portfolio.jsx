@@ -6,16 +6,18 @@ const artworks = [
   { id: 3, img: "/artworks/cow.png" }, 
   { id: 4, img: "/artworks/comission1.png" },
   { id: 5, img: "/artworks/scenery.png" },
-  { id: 6, img: "/artworks/forest.png" },
+  { id: 6, img: "/artworks/sadgirl.png" },
   { id: 7, img: "/artworks/dog.png" },
   { id: 8, img: "/artworks/dentist.png" },
-  { id: 9, title: "Fog", img: "/artworks/skull.png" },
-  { id: 10, title: "Pebble", img: "/artworks/artbookpage.png" },
-  { id: 11, title: "Breeze", img: "/artworks/camel.png" },
-  { id: 12, title: "Driftwood", img: "/artworks/artpage2.png" },
+  { id: 9, img: "/artworks/skull.png" },
+  { id: 10, img: "/artworks/artbookpage.png" },
+  { id: 11, img: "/artworks/camel.png" },
+  { id: 12, img: "/artworks/comission3.png" },
   { id: 13, img: "/artworks/artpage3.png"},
-  { id: 14, title: "Terracotta", img: "/artworks/girlwithsheep.png" },
-  { id: 15, title: "Flora", img: "/artworks/sadgirl.png" },
+  { id: 14, img: "/artworks/girlwithsheep.png" },
+  { id: 15, img: "/artworks/artpage2.png" },
+  { id: 15, img: "/artworks/forest.png" },
+
 ];
 
 const Portfolio = () => {
@@ -185,7 +187,6 @@ const Portfolio = () => {
                     setPanAngle(-angle);
                   }}
                 >
-                  {/* THE FIX: Removed max-h and max-w. Now forcing absolute heights so small images stretch aggressively! */}
                   <img 
                     src={art.img} 
                     alt={art.title || "Artwork"} 

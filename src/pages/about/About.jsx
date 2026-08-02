@@ -195,14 +195,20 @@ export default function About() {
               About
             </h1>
             <p>
-              I’m a Computer Science student at NIT Hamirpur, but my screen isn’t always filled with code. Depending on the hour, you might find me debugging a backend architecture, blending oils on a canvas, or losing myself in a dance routine.
+              Hi, I'm Akshita.
             </p>
             <p>
-              I believe the best digital spaces feel physical. I’m drawn to soft shadows, paper textures, and the quiet aesthetic of olive greens and warm cream. For me, programming and painting aren’t opposites—they’re just different ways of bringing an idea into the world.
+
+              I'm the person behind this website and every piece of art you'll find here. I'm currently a third year Computer Science undergraduate at NIT Hamirpur, and this website is much more than just another project to me, it's something I've dreamed of without even realizing it. I've been creating art for as long as I can rememberand never once, when I was younger, did I imagine I'd someday build an entire website just to showcase my work, let alone sell it. It still feels surreal to think that people would actually want to own something I've created with my own hands. Art has always been a huge part of who I am. It's where I find peace, where I express myself, and honestly, it's one of the things that  defines me the most. But there's more to me than just art.
             </p>
             <p>
-              When I’m not building interactive web experiences, I’m usually tending to my plants, sketching unfinished ideas, or brewing another cup of coffee to the sound of a carefully curated playlist.
+              I love travelling and taking pictures wherever I go. I also love dancing. I trained at a dance studio for about six or seven months when I was in seventh grade, and I've loved moving to music ever since. In college, I've been part of dance clubs and have performed on stage at various events, and it's still one of my favorite ways to express myself.
             </p>
+            <p>
+              I'm endlessly curious and enjoy picking up little creative hobbies just to see if I can make something with my own hands. Whether it's cooking, crocheting, stitching, or trying any random crafty project that catches my eye, I find joy in creating. I also love travelling, clicking photos along the way, and dancing whenever I get the chance.
+              Whether it's with code, paint, yarn, or a camera, I simply love creating things.
+            </p>
+            <p>So, thank you for stopping by. I hope you enjoy exploring this little corner of my world as much as I enjoyed building it.</p>
           </div>
 
           <div className="flex-1 w-full flex justify-center md:justify-end mt-12 md:mt-0">
@@ -218,11 +224,7 @@ export default function About() {
                 />
               </div>
 
-              {/* 2. THE TOP-LEFT FLORAL CASCADE
-                  - Removed the stray scale-x-[-1]
-                  - Fixed the image path typo so it reliably loads uppercorner.png
-                  - Adjusted to valid Tailwind classes (sm:-top-32 sm:-left-36)
-              */}
+              {/* 2. THE TOP-LEFT FLORAL CASCADE*/}
               <div 
                 className="absolute -top-24 -left-28 sm:-top-30 sm:-left-34 w-[70%] sm:w-[80%] h-[70%] sm:h-[80%] z-10 pointer-events-none scale-x-[-1] drop-shadow-sm"
               >
@@ -241,9 +243,7 @@ export default function About() {
                 ></div>
               </div>
 
-              {/* 3. THE BOTTOM-RIGHT FLORAL CORNER 
-                  - Keeps scale-x-[-1] to invert it
-              */}
+              {/* 3. THE BOTTOM-RIGHT FLORAL CORNER*/}
               <div 
                 className="absolute -bottom-24 -right-28 sm:-bottom-32 sm:-right-40 w-[70%] sm:w-[85%] h-[70%] sm:h-[85%] z-10 pointer-events-none scale-x-[-1] drop-shadow-sm"
               >
@@ -261,11 +261,6 @@ export default function About() {
                   }}
                 ></div>
               </div>
-
-              {/* Decorative stamp */}
-              <span className="absolute bottom-8 right-8 text-[#7A8762] text-2xl font-serif bg-[#F7F3EB] px-2 rounded-full border border-[#C6B89E]/30 shadow-sm z-20 transition-transform duration-500 group-hover:scale-110">
-                ❦
-              </span>
             </div>
           </div>
         </section>
