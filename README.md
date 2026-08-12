@@ -152,7 +152,20 @@ git push origin feature-name
 5. Open a Pull Request
 
 ---
+## Reporting Issues
 
+Found a bug or have a suggestion? Feel free to open an issue.
+
+When reporting an issue, please include:
+
+- A clear description of the problem or suggestion
+- Steps to reproduce the issue, if applicable
+- Expected and actual behavior
+- Screenshots or error messages, if relevant
+
+Before opening an issue, please check whether a similar issue has already been reported.
+
+---
 # License
 
 This project is intended for educational and portfolio purposes.
