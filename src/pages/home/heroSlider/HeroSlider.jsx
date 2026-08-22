@@ -17,7 +17,6 @@ const HeroSlider = () => {
   };
 
   const [frames, setFrames] = useState([
-    // 👇 SHIFTED 'x' VALUES RIGHT SO NOTHING HIDES BEHIND THE BOX ON LOAD
     { 
       id: 1, 
       img: "/artworks/comission3.png", 
@@ -163,7 +162,7 @@ const HeroSlider = () => {
                 : `rotate(${frame.rot}deg)`,
               transformOrigin: isHung ? "top center" : "center center",
               
-              // 👇 Ensure inspected items pop over the text box, but dragged items stay under
+              // Ensure inspected items pop over the text box, but dragged items stay under
               zIndex: frame.isInspecting ? 9999 : frame.z,
               
               width: "clamp(120px, 12vw, 220px)",

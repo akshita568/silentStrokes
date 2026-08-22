@@ -34,13 +34,11 @@ const BespokeCommissions = () => {
             </Link>
           </div>
 
-          {/* FIXED IMAGE CONTAINER: No cropping, handles any aspect ratio perfectly */}
           <div className="flex-1 w-full relative z-10 flex justify-center items-center">
             <div className="w-full max-w-md bg-sand/20 p-4 border border-sand shadow-inner rounded-sm">
               <img 
                 src="/artworks/comission2.png" 
                 alt="Commission Example" 
-                /* h-auto and object-contain ensure the image never stretches or crops */
                 className="w-full h-auto max-h-[60vh] object-contain filter grayscale-[10%]"
               />
             </div>

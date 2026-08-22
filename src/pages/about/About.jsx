@@ -235,7 +235,7 @@ export default function About() {
                     WebkitMaskSize: 'contain',
                     WebkitMaskRepeat: 'no-repeat',
                     WebkitMaskPosition: 'top left',
-                    maskImage: `url('/border/uppercorner.png')`, /* TYPO FIXED HERE */
+                    maskImage: `url('/border/uppercorner.png')`,
                     maskSize: 'contain',
                     maskRepeat: 'no-repeat',
                     maskPosition: 'top left'
@@ -292,7 +292,6 @@ export default function About() {
               style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, #7A8762 31px, #7A8762 32px)' }} 
             />
 
-            {/* Render the photos */}
             {scatterItems.map((item, i) => (
               <DraggableItem
                 key={item.id}

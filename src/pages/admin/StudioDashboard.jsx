@@ -6,16 +6,13 @@ import { AuthContext } from "../../AuthProvider/AuthProvider";
 const StudioDashboard = () => {
   const { user, login, logout, isLoading } = useContext(AuthContext); 
   
-  // Tab State
-  const [activeTab, setActiveTab] = useState("commissions"); // 'commissions', 'inquiries', or 'users'
+  const [activeTab, setActiveTab] = useState("commissions");
   
-  // Data States
   const [commissions, setCommissions] = useState([]);
   const [inquiries, setInquiries] = useState([]);
   const [usersList, setUsersList] = useState([]);
   const [fetching, setFetching] = useState(false);
   
-  // Login States
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -36,13 +33,11 @@ const StudioDashboard = () => {
           setCommissions(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
         } 
         else if (activeTab === "inquiries") {
-          // Ensure your contact form saves to a collection named "inquiries" or "messages"
           const q = query(collection(db, "inquiries"), orderBy("createdAt", "desc"));
           const snapshot = await getDocs(q);
           setInquiries(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
         } 
         else if (activeTab === "users") {
-          // Fetches from your "users" Firestore collection
           const q = query(collection(db, "users"));
           const snapshot = await getDocs(q);
           setUsersList(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
@@ -55,7 +50,7 @@ const StudioDashboard = () => {
     };
 
     fetchData();
-  }, [isAdmin, activeTab]); // Re-runs every time you click a new tab
+  }, [isAdmin, activeTab]);
 
   const handleSecretLogin = async (e) => {
     e.preventDefault();
@@ -73,7 +68,6 @@ const StudioDashboard = () => {
 
   if (isLoading) return <div className="min-h-screen bg-base-white"></div>;
 
-  // 🛑 IF NOT LOGGED IN
   if (!isAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-base-white font-sans px-4">
@@ -107,7 +101,6 @@ const StudioDashboard = () => {
     );
   }
 
-  // ✨ IF LOGGED IN: Show the Dashboard
   return (
     <div className="min-h-screen bg-sand/10 p-8 md:p-12 font-sans text-text-main pt-24">
       <div className="max-w-6xl mx-auto">

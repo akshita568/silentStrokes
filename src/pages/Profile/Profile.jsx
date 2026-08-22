@@ -20,12 +20,10 @@ export default function Profile() {
         return;
       }
       try {
-        // 1. Fetch user commissions
         const commQuery = query(collection(db, 'commissions'), where('userId', '==', user.uid));
         const commSnapshot = await getDocs(commQuery);
         const commissions = commSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-        // 2. Fetch user inquiries
         const inqQuery = query(collection(db, 'inquiries'), where('userId', '==', user.uid));
         const inqSnapshot = await getDocs(inqQuery);
         const inquiries = inqSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));

@@ -5,8 +5,6 @@ const ErrorPage = () => {
     <section className="flex items-center h-screen p-16 bg-base-white">
       <div className="container flex flex-col items-center justify-center px-5 mx-auto my-8">
         <div className="max-w-md text-center">
-          
-          {/* Elegant typographic 404 replacing the missing image */}
           <h1 className="text-8xl md:text-9xl font-serif text-olive opacity-80 mb-6 tracking-widest">
             404
           </h1>

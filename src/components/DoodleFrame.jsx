@@ -11,7 +11,7 @@ const DoodleFrame = ({ children, className = "" }) => {
       <div 
         className="absolute -bottom-6 -left-6 w-48 h-48 md:w-56 md:h-56 bg-olive z-10 pointer-events-none"
         style={{
-          WebkitMaskImage: `url('/border/lowercorner.png')`, /* Update this file name if needed */
+          WebkitMaskImage: `url('/border/lowercorner.png')`,
           WebkitMaskSize: 'contain',
           WebkitMaskRepeat: 'no-repeat',
           WebkitMaskPosition: 'bottom left',
@@ -26,7 +26,7 @@ const DoodleFrame = ({ children, className = "" }) => {
       <div 
         className="absolute -top-6 -right-6 w-48 h-48 md:w-56 md:h-56 bg-olive z-10 pointer-events-none"
         style={{
-          WebkitMaskImage: `url('/border/uppercorner.png')`, /* Update this file name if needed */
+          WebkitMaskImage: `url('/border/uppercorner.png')`,
           WebkitMaskSize: 'contain',
           WebkitMaskRepeat: 'no-repeat',
           WebkitMaskPosition: 'top right',

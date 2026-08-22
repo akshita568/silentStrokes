@@ -80,9 +80,9 @@ const RippleCursor = () => {
       window.removeEventListener("mousemove", addRipple);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [isBookingPage]); // 2. Add the dependency so the effect updates on route changes
+  }, [isBookingPage]);
 
-  // 3. Conditional return MUST happen AFTER the hooks
+  // Conditional return MUST happen AFTER the hooks
   if (isBookingPage) {
     return null;
   }
