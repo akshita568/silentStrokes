@@ -8,7 +8,7 @@ Rather than being a conventional portfolio, Silent Strokes focuses on creating a
 
 ## Live Demo
 
-**Live Website:** https://silent-strokes-7ddp-mu.vercel.app/ 
+**Live Website:** https://silent-strokes.vercel.app/ 
 
 ---
 
