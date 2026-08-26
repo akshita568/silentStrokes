@@ -22,7 +22,6 @@ const Contact = () => {
     setLoading(true);
 
     try {
-      // Directly write the inquiry to your Firebase Firestore database
       await addDoc(collection(db, "inquiries"), {
         userId: user.uid || "anonymous",
         email: email || user.email,
@@ -33,7 +32,6 @@ const Contact = () => {
       });
 
       toast.success("Message sent successfully!");
-      // Clear form after successful submission
       setEmail("");
       setSubject("");
       setMessage("");

@@ -4,7 +4,7 @@ import { FiAlignJustify, FiLogOut, FiUser } from "react-icons/fi";
 import { LuCommand } from "react-icons/lu";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
-import { CartContext } from "../../../context/CartProvider"; //
+import { CartContext } from "../../../context/CartProvider";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);

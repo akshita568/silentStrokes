@@ -19,7 +19,6 @@ export default function ReviewForm() {
     setStatus('submitting');
 
     try {
-      // 👇 This uses your existing 'db' but drops the data into a brand new 'reviews' folder
       await addDoc(collection(db, 'reviews'), {
         name: formData.name,
         relation: formData.relation,

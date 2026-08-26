@@ -4,9 +4,8 @@ import { FiRefreshCcw, FiEdit3 } from "react-icons/fi";
 const InteractiveCanvas = () => {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [hasDrawn, setHasDrawn] = useState(false); // Tracks if the user has started drawing
+  const [hasDrawn, setHasDrawn] = useState(false);
   
-  // Keep the cutesy color palette just for the drawing pens
   const colors = ["#4b5563", "#fb7185", "#f472b6", "#a78bfa", "#60a5fa", "#34d399", "#facc15"];
   const [activeColor, setActiveColor] = useState(colors[0]);
 
@@ -38,7 +37,7 @@ const InteractiveCanvas = () => {
   };
 
   const startDrawing = (e) => {
-    if (!hasDrawn) setHasDrawn(true); // Permanently hide the text on first touch
+    if (!hasDrawn) setHasDrawn(true);
     
     const context = canvasRef.current.getContext("2d");
     const { x, y } = getCoordinates(e);
@@ -71,13 +70,11 @@ const InteractiveCanvas = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
-    setHasDrawn(false); // Bring the text back if they clear everything
+    setHasDrawn(false);
   };
 
   return (
     <div className="flex flex-col items-center w-full">
-      
-      {/* The Canvas Area - Restored to the earthy aesthetic */}
       <div className="relative w-full h-[400px] md:h-[450px] bg-base-white rounded-sm border-2 border-dashed border-sand shadow-sm overflow-hidden cursor-crosshair">
         
         {/* Playful CTA that vanishes completely once hasDrawn is true */}

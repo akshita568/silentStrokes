@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom"; // 🛑 Removed Outlet
+import { createBrowserRouter } from "react-router-dom";
 import Main from "../Main/Main.jsx";
 import ErrorPage from "../pages/error/ErrorPage";
 import RippleCursor from "../components/shared/RippleCursor.jsx";
@@ -18,7 +18,6 @@ import Register from "../pages/auth/register/Register";
 import Profile from "../pages/Profile/Profile";
 import ReviewForm from "../pages/Review/ReviewForm"; 
 
-// 👇 1. IMPORT YOUR NEW SECRET DASHBOARD HERE
 import StudioDashboard from "../pages/admin/StudioDashboard";
 
 const Router = createBrowserRouter([
@@ -45,7 +44,6 @@ const Router = createBrowserRouter([
             { path: "/profile", element: <Profile /> }
         ],
     },
-    // 👇 2. YOUR SECRET STUDIO DOOR
     {
         path: "/studio-door",
         element: (

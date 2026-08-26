@@ -6,7 +6,6 @@ import { db } from "../../utils/firebase.config";
 import Container from "../../components/container/Container";
 import InteractiveCanvas from "./InteractiveCanvas";
 
-// 👇 ADD YOUR EXAMPLE ARTWORKS HERE
 const commissionExamples = [
   { 
     id: 1, 
@@ -74,7 +73,6 @@ const Booking = () => {
 
       toast.success("Commission request submitted successfully!");
       
-      // Clear form
       setName("");
       setEmail("");
       setLocation("");
@@ -91,8 +89,6 @@ const Booking = () => {
 
   return (
     <div className="bg-base-white min-h-screen pb-16 font-sans text-text-main">
-      
-      {/* 1. Hero Section with the Canvas - PADDING REDUCED */}
       <section className="relative pt-24 pb-8 lg:pt-32 lg:pb-12 overflow-hidden">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -119,7 +115,6 @@ const Booking = () => {
       </section>
 
       <Container>
-        {/* REDUCED vertical padding and gap between columns */}
         <div className="py-8 lg:py-12 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           
           {/* 2. The Process & Pricing Description */}
@@ -159,12 +154,10 @@ const Booking = () => {
             </div>
           </div>
 
-          {/* 3. Friendly Inquiry Form */}
           <div className="bg-base-white p-6 md:p-10 border border-sand shadow-sm rounded-sm">
             <h3 className="text-2xl font-serif text-text-main mb-2">Commission Request</h3>
             <p className="text-sm text-dove mb-6">Fill out the form below and I'll get back to you as soon as possible.</p>
             
-            {/* REDUCED space-y-8 to space-y-6 */}
             <form onSubmit={handleSubmit} className="space-y-6">
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -262,7 +255,6 @@ const Booking = () => {
           </div>
         </div>
 
-        {/* 👇 4. NEW PAST COMMISSIONS GALLERY - GAP REDUCED 👇 */}
         <div className="mt-12 md:mt-16 border-t border-sand pt-12 md:pt-16">
           <div className="text-center mb-10 md:mb-12 max-w-2xl mx-auto">
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-olive mb-3 block">

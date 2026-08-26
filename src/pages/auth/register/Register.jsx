@@ -10,7 +10,6 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   
-  // 👇 LOADING STATE
   const [isRegistering, setIsRegistering] = useState(false); 
   
   const navigate = useNavigate();
@@ -18,7 +17,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError(""); 
-    setIsRegistering(true); // Start loading text
+    setIsRegistering(true);
     
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -36,7 +35,7 @@ const Register = () => {
       setError(err.message || "Failed to create an account. Please try again.");
       console.error(err);
     } finally {
-      setIsRegistering(false); // Stop loading text
+      setIsRegistering(false);
     }
   };
 

@@ -10,10 +10,9 @@ const Login = () => {
   const [error, setError] = useState("");
   const [resetMessage, setResetMessage] = useState(""); 
   
-  // 👇 ALL LOADING STATES
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [isResetting, setIsResetting] = useState(false); // New state for forgot password
+  const [isResetting, setIsResetting] = useState(false);
   
   const { login, googleLogin } = useContext(AuthContext); 
   const navigate = useNavigate();
@@ -62,7 +61,7 @@ const Login = () => {
       return;
     }
 
-    setIsResetting(true); // Start loading text
+    setIsResetting(true);
     try {
       await sendPasswordResetEmail(auth, email);
       setResetMessage("Password reset email sent! Please check your inbox.");
@@ -70,7 +69,7 @@ const Login = () => {
       setError("Failed to send reset email. Make sure the email is registered.");
       console.error(err);
     } finally {
-      setIsResetting(false); // Stop loading text
+      setIsResetting(false);
     }
   };
 
