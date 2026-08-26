@@ -61,7 +61,7 @@ cd silentStrokes
 ## 2. Install Dependencies
 
 ```bash
-npm install --legacy-peer-deps
+npm install 
 ```
 
 ---
@@ -81,8 +81,7 @@ http://localhost:5173
 ```
 ---
 
-# Design Philosophy
-
+# Design
 The visual identity of Silent Strokes is inspired by traditional sketchbooks and artist studios.
 
 The project focuses on:
@@ -95,18 +94,6 @@ The project focuses on:
 - Story-driven presentation
 
 Every section is designed to feel like turning the pages of an artist's journal rather than browsing a standard portfolio.
-
----
-
-# Security
-
-The application implements several security measures:
-
-- Protected admin routes
-- Firebase Authentication
-- Firestore security rules
-- Unauthorized route redirection
-- Client-side authentication state management
 
 ---
 
@@ -130,26 +117,33 @@ Planned enhancements include:
 
 Contributions, suggestions, and improvements are always welcome.
 
-1. Fork the repository
-2. Create a feature branch
+Before starting work, please open an issue describing the change you would like to make or comment on an existing issue and ask to be assigned to it. This helps avoid duplicate work and lets the maintainers know that someone is working on the issue.
+
+1. Create or choose an issue
+   - Open an issue describing your proposed change, or find an existing issue you'd like to work on.
+   - Please wait until you are assigned to the issue before starting work.
+
+2. Fork the repository
+
+3. Create a feature branch
 
 ```bash
 git checkout -b feature-name
 ```
 
-3. Commit your changes
+4. Commit your changes
 
 ```bash
 git commit -m "feat: description"
 ```
 
-4. Push your branch
+5. Push your branch
 
 ```bash
 git push origin feature-name
 ```
 
-5. Open a Pull Request
+6. Open a Pull Request
 
 ---
 ## Reporting Issues
