@@ -173,3 +173,4 @@ This project is intended for educational and portfolio purposes.
 Computer Science Undergraduate • Frontend Developer • Artist
 
 Combining technology and creativity to build immersive digital experiences.
+If you like the website, consider leaving a star on the repository! :)
