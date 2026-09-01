@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useIsMobile, useIsTouch } from '../../hooks/useMediaQuery';
 
 const artworks = [
   { id: 1, img: "/artworks/comission2.png" }, 
@@ -32,12 +33,29 @@ const Portfolio = () => {
   const artClickStartX = useRef(0);
   const artClickStartY = useRef(0);
 
+  const isMobile = useIsMobile();
+  const isTouch = useIsTouch();
+
   const isFocused = focusedIndex !== null;
-  
-  // Room dimensions calculated to handle forced massive scaling
-  const radius = 3200; 
-  const angleSpacing = 15; 
-  const rowOffsetPx = 450; 
+
+  // Room dimensions calculated to handle forced massive scaling.
+  // On smaller viewports the room is drawn tighter so the same artworks fill a
+  // portrait screen and both rows stay in view; the drag-to-pan interaction is
+  // otherwise identical.
+  const radius = isMobile ? 2200 : 3200;
+  const angleSpacing = 15;
+  const rowOffsetPx = isMobile ? 300 : 450;
+
+  // The artworks occupy one arc of the cylinder. Tiling that arc around the full
+  // 360° means panning past the last piece wraps back to the first instead of
+  // revealing blank wall. 8 items/row × 15° = 120°, which divides 360° evenly,
+  // so the three copies meet with no visible seam.
+  const ringPeriod = Math.ceil(artworks.length / 2) * angleSpacing;
+  const ringCopies = Math.max(1, Math.round(360 / ringPeriod));
+  const ringOffsets = Array.from(
+    { length: ringCopies },
+    (_, k) => k - Math.floor(ringCopies / 2)
+  );
 
   const getArtAngle = (index) => {
     const isTopRow = index % 2 === 0;
@@ -81,36 +99,43 @@ const Portfolio = () => {
     setPanAngle(prev => prev - e.deltaY * 0.05 - e.deltaX * 0.05);
   };
 
-  let targetRotY = panAngle + (mouse.x * 3); 
-  let targetRotX = mouse.y * 3;
-  
+  // Idle cursor-parallax is a mouse-only flourish — on touch there is no hover
+  // position, so it is disabled to keep the room from lurching on first touch.
+  const parallax = isTouch ? 0 : 1;
+  let targetRotY = panAngle + (mouse.x * 3 * parallax);
+  let targetRotX = mouse.y * 3 * parallax;
+
   // Pushing the camera physically closer to the walls by default
-  let targetZ = 1200; 
-  let targetY = 0; 
+  let targetZ = isMobile ? 900 : 1200;
+  let targetY = 0;
 
   if (isFocused) {
     const isTopRow = focusedIndex % 2 === 0;
-    targetRotY = panAngle; 
-    targetRotX = 0;        
-    
+    targetRotY = panAngle;
+    targetRotX = 0;
+
     // Zoom drops you right in front of the massive canvas
-    targetZ = 2600; 
-    targetY = isTopRow ? rowOffsetPx : -rowOffsetPx; 
+    targetZ = isMobile ? 1950 : 2600;
+    targetY = isTopRow ? rowOffsetPx : -rowOffsetPx;
   }
 
   return (
     <div 
-      className="relative w-full h-[85vh] min-h-[700px] overflow-hidden box-border bg-[#F5F3EB] text-[#2B3024] font-sans selection:bg-[#7A8B5F] cursor-grab active:cursor-grabbing"
+      className="relative w-full h-[82vh] min-h-[520px] md:h-[85vh] md:min-h-[700px] overflow-hidden box-border bg-[#F5F3EB] text-[#2B3024] font-sans selection:bg-[#7A8B5F] cursor-grab active:cursor-grabbing"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}
+      onPointerCancel={handlePointerUp}
       onWheel={handleWheel}
-      style={{ 
-        touchAction: 'none',
-        clipPath: 'inset(0)', 
+      style={{
+        // Let vertical swipes scroll the page past the room; horizontal drags
+        // still pan the exhibition. Prevents the room becoming a scroll trap.
+        // While zoomed into a single piece it's a lightbox, so lock scrolling.
+        touchAction: isFocused ? 'none' : 'pan-y',
+        clipPath: 'inset(0)',
         contain: 'paint layout'
-      }} 
+      }}
     >
       
       {/* Texture Overlay */}
@@ -121,13 +146,13 @@ const Portfolio = () => {
         }}
       />
 
-      <div className={`absolute top-0 left-0 w-full p-8 z-40 flex justify-between items-start transition-opacity duration-700 pointer-events-none ${isFocused ? 'opacity-0' : 'opacity-100'}`}>
+      <div className={`absolute top-0 left-0 w-full p-5 sm:p-8 z-40 flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-start transition-opacity duration-700 pointer-events-none ${isFocused ? 'opacity-0' : 'opacity-100'}`}>
         <div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-[#2B3024]">My Collection</h1>
-          <p className="text-[#7A8B5F] font-medium tracking-widest uppercase text-sm mt-1">Interactive Exhibition</p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter text-[#2B3024]">My Collection</h1>
+          <p className="text-[#7A8B5F] font-medium tracking-widest uppercase text-xs sm:text-sm mt-1">Interactive Exhibition</p>
         </div>
-        <div className="text-right text-[#B4B4A8] text-xs md:text-sm tracking-widest max-w-[200px] leading-relaxed hidden sm:block">
-          DRAG BACKGROUND TO PAN. <br/>CLICK ARTWORK TO VIEW.
+        <div className="sm:text-right text-[#B4B4A8] text-[10px] sm:text-sm tracking-widest sm:max-w-[200px] leading-relaxed">
+          {isTouch ? <>DRAG TO PAN THE ROOM. <br/>TAP ARTWORK TO VIEW.</> : <>DRAG BACKGROUND TO PAN. <br/>CLICK ARTWORK TO VIEW.</>}
         </div>
       </div>
 
@@ -151,52 +176,55 @@ const Portfolio = () => {
             transition: 'transform 1.2s cubic-bezier(0.25, 1, 0.2, 1)' 
           }}
         >
-          {artworks.map((art, i) => {
-            const angle = getArtAngle(i);
-            const isTopRow = i % 2 === 0;
-            const randomTilt = ((i % 4) - 1.5); 
-            
-            return (
-              <div 
-                key={art.id}
-                className={`absolute top-1/2 left-1/2 group pointer-events-none transition-opacity duration-1000 ${isFocused && focusedIndex !== i ? 'opacity-20' : 'opacity-100'}`}
-                style={{
-                  transform: `translate(-50%, -50%) rotateY(${angle}deg) translateZ(${-radius}px) translateY(${isTopRow ? -rowOffsetPx : rowOffsetPx}px) rotateZ(${randomTilt}deg)`,
-                  transformStyle: 'preserve-3d',
-                }}
-              >
-                <div 
-                  className={`bg-[#FAFAFA] p-3 md:p-5 shadow-[0_40px_80px_rgba(43,48,36,0.15)] transition-transform duration-700 pointer-events-auto cursor-pointer ${!isFocused && 'hover:-translate-y-4 hover:scale-[1.04]'}`}
-                  
-                  onPointerDown={(e) => {
-                    e.stopPropagation(); 
-                    artClickStartX.current = e.clientX || (e.touches ? e.touches[0].clientX : 0);
-                    artClickStartY.current = e.clientY || (e.touches ? e.touches[0].clientY : 0);
-                  }}
-                  
-                  onPointerUp={(e) => {
-                    e.stopPropagation();
-                    const clientX = e.clientX || (e.changedTouches ? e.changedTouches[0].clientX : 0);
-                    const clientY = e.clientY || (e.changedTouches ? e.changedTouches[0].clientY : 0);
-                    
-                    const movedX = Math.abs(clientX - artClickStartX.current);
-                    const movedY = Math.abs(clientY - artClickStartY.current);
-                    if (movedX > 5 || movedY > 5) return; 
-                    
-                    setFocusedIndex(i);
-                    setPanAngle(-angle);
+          {ringOffsets.map((ring) =>
+            artworks.map((art, i) => {
+              const angle = getArtAngle(i) + ring * ringPeriod;
+              const isTopRow = i % 2 === 0;
+              const randomTilt = ((i % 4) - 1.5);
+
+              return (
+                <div
+                  key={`${ring}:${i}`}
+                  className={`absolute top-1/2 left-1/2 group pointer-events-none transition-opacity duration-1000 ${isFocused && focusedIndex !== i ? 'opacity-20' : 'opacity-100'}`}
+                  style={{
+                    transform: `translate(-50%, -50%) rotateY(${angle}deg) translateZ(${-radius}px) translateY(${isTopRow ? -rowOffsetPx : rowOffsetPx}px) rotateZ(${randomTilt}deg)`,
+                    transformStyle: 'preserve-3d',
                   }}
                 >
-                  <img 
-                    src={art.img} 
-                    alt={art.title || "Artwork"} 
-                    className="w-auto h-[350px] md:h-[450px] lg:h-[600px] max-w-[85vw] shadow-inner pointer-events-none"
-                    draggable="false" 
-                  />
+                  <div
+                    className={`bg-[#FAFAFA] p-3 md:p-5 shadow-[0_40px_80px_rgba(43,48,36,0.15)] transition-transform duration-700 pointer-events-auto cursor-pointer ${!isFocused && 'hover:-translate-y-4 hover:scale-[1.04]'}`}
+
+                    onPointerDown={(e) => {
+                      e.stopPropagation();
+                      artClickStartX.current = e.clientX || (e.touches ? e.touches[0].clientX : 0);
+                      artClickStartY.current = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+                    }}
+
+                    onPointerUp={(e) => {
+                      e.stopPropagation();
+                      const clientX = e.clientX || (e.changedTouches ? e.changedTouches[0].clientX : 0);
+                      const clientY = e.clientY || (e.changedTouches ? e.changedTouches[0].clientY : 0);
+
+                      const movedX = Math.abs(clientX - artClickStartX.current);
+                      const movedY = Math.abs(clientY - artClickStartY.current);
+                      if (movedX > 5 || movedY > 5) return;
+
+                      setFocusedIndex(i);
+                      setPanAngle(-angle);
+                    }}
+                  >
+                    <img
+                      src={art.img}
+                      alt={art.title || "Artwork"}
+                      className="w-auto h-[300px] sm:h-[380px] md:h-[450px] lg:h-[600px] max-w-[80vw] shadow-inner pointer-events-none"
+                      draggable="false"
+                      decoding="async"
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
       </div>
     </div>

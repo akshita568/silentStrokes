@@ -35,7 +35,7 @@ const DraggableItem = ({ item, setTopIndex, baseZ, isTidy }) => {
   };
 
   useEffect(() => {
-    const mult = window.innerWidth < 768 ? 0.4 : 1;
+    const mult = window.innerWidth < 1024 ? 0.4 : 1;
     offset.current = { x: item.initX * mult, y: item.initY * mult };
     updateStyle();
   }, [item.initX, item.initY]);
@@ -46,7 +46,7 @@ const DraggableItem = ({ item, setTopIndex, baseZ, isTidy }) => {
     cancelAnimationFrame(raf.current);
     if (cardRef.current) cardRef.current.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.2, 1)';
     
-    const mult = window.innerWidth < 768 ? 0.4 : 1;
+    const mult = window.innerWidth < 1024 ? 0.4 : 1;
     
     if (isTidy) {
       offset.current = { x: item.tidyX * mult, y: item.tidyY * mult };
@@ -149,10 +149,10 @@ const DraggableItem = ({ item, setTopIndex, baseZ, isTidy }) => {
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
-      className="absolute top-1/2 left-1/2 p-3 bg-[#FAFAFA] shadow-lg border border-[#DCD9CE] touch-none cursor-grab"
-      style={{ 
-        zIndex, 
-        width: 'clamp(180px, 18vw, 260px)', 
+      className="absolute top-1/2 left-1/2 p-2 sm:p-3 bg-[#FAFAFA] shadow-lg border border-[#DCD9CE] touch-none cursor-grab"
+      style={{
+        zIndex,
+        width: 'clamp(128px, 34vw, 260px)',
         transformOrigin: 'center center'
       }}
     >
@@ -177,7 +177,7 @@ export default function About() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F3EB] text-[#3E3A35] font-sans selection:bg-[#7A8762] selection:text-[#F7F3EB]">
+    <div className="min-h-screen overflow-x-clip bg-[#F7F3EB] text-[#3E3A35] font-sans selection:bg-[#7A8762] selection:text-[#F7F3EB]">
       
       <div 
         className="pointer-events-none fixed inset-0 z-50 opacity-[0.25] mix-blend-multiply"
@@ -225,8 +225,8 @@ export default function About() {
               </div>
 
               {/* 2. THE TOP-LEFT FLORAL CASCADE*/}
-              <div 
-                className="absolute -top-24 -left-28 sm:-top-30 sm:-left-34 w-[70%] sm:w-[80%] h-[70%] sm:h-[80%] z-10 pointer-events-none scale-x-[-1] drop-shadow-sm"
+              <div
+                className="absolute -top-14 -left-14 sm:-top-28 sm:-left-32 w-[60%] sm:w-[80%] h-[60%] sm:h-[80%] z-10 pointer-events-none scale-x-[-1] drop-shadow-sm"
               >
                 <div 
                   className="w-full h-full bg-[#7A8762]"
@@ -244,8 +244,8 @@ export default function About() {
               </div>
 
               {/* 3. THE BOTTOM-RIGHT FLORAL CORNER*/}
-              <div 
-                className="absolute -bottom-24 -right-28 sm:-bottom-32 sm:-right-40 w-[70%] sm:w-[85%] h-[70%] sm:h-[85%] z-10 pointer-events-none scale-x-[-1] drop-shadow-sm"
+              <div
+                className="absolute -bottom-14 -right-14 sm:-bottom-32 sm:-right-40 w-[60%] sm:w-[85%] h-[60%] sm:h-[85%] z-10 pointer-events-none scale-x-[-1] drop-shadow-sm"
               >
                 <div 
                   className="w-full h-full bg-[#7A8762]"
@@ -283,9 +283,9 @@ export default function About() {
             </button>
           </div>
 
-          <div 
-            className="relative w-full h-[75vh] min-h-[650px] bg-[#EFE9DC] rounded-3xl overflow-hidden shadow-inner border border-[#C6B89E]/40" 
-            style={{ touchAction: 'none' }} 
+          <div
+            className="relative w-full h-[70vh] min-h-[440px] sm:h-[75vh] sm:min-h-[650px] bg-[#EFE9DC] rounded-3xl overflow-hidden shadow-inner border border-[#C6B89E]/40"
+            style={{ touchAction: 'pan-y' }}
           >
             <div 
               className="absolute inset-0 opacity-10 pointer-events-none" 

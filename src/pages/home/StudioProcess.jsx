@@ -19,9 +19,9 @@ const StudioProcess = () => {
   };
 
   return (
-    <section className="py-24 bg-base-white border-b border-sand">
+    <section className="py-16 md:py-24 bg-base-white border-b border-sand">
       <Container>
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-24">
+        <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-24">
           
           <div className="flex-1 w-full">
             <h2 className="text-xs font-bold uppercase tracking-widest text-olive mb-2">Behind the Canvas</h2>
@@ -40,7 +40,7 @@ const StudioProcess = () => {
               ref={containerRef}
               onPointerMove={handlePointerMove}
               onPointerDown={handlePointerMove}
-              className="relative w-full touch-none select-none overflow-hidden border border-sand shadow-lg cursor-ew-resize bg-sand/10"
+              className="relative w-full touch-pan-y select-none overflow-hidden border border-sand shadow-lg cursor-ew-resize bg-sand/10"
             >
               {/* NOTE: Use two images of the SAME dimensions here for the best effect */}
               
@@ -71,7 +71,7 @@ const StudioProcess = () => {
                 style={{ left: `${sliderPos}%` }}
               >
                 {/* The Handle */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-base-white rounded-full shadow-md flex items-center justify-center border border-sand">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-8 md:h-8 bg-base-white rounded-full shadow-md flex items-center justify-center border border-sand">
                   <div className="flex gap-1">
                     <div className="w-[2px] h-3 bg-olive/50 rounded-full"></div>
                     <div className="w-[2px] h-3 bg-olive/50 rounded-full"></div>

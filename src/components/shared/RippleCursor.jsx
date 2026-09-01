@@ -25,12 +25,12 @@ const RippleCursor = () => {
     window.addEventListener("resize", resize);
     resize();
 
-    const addRipple = (e) => {
+    const addRipple = (x, y) => {
       const now = Date.now();
       if (now - lastDrop > 50) {
         ripples.push({
-          x: e.clientX,
-          y: e.clientY,
+          x,
+          y,
           life: 1,
           maxRadius: Math.random() * 10 + 20,
         });
@@ -38,7 +38,18 @@ const RippleCursor = () => {
       }
     };
 
-    window.addEventListener("mousemove", addRipple);
+    // Desktop: ripples trail the cursor.
+    const onMouseMove = (e) => addRipple(e.clientX, e.clientY);
+    // Touch: ripples bloom wherever a finger touches or drags, preserving the
+    // "disturbing still water" intent without a cursor to follow.
+    const onTouch = (e) => {
+      const t = e.touches && e.touches[0];
+      if (t) addRipple(t.clientX, t.clientY);
+    };
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("touchstart", onTouch, { passive: true });
+    window.addEventListener("touchmove", onTouch, { passive: true });
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -77,7 +88,9 @@ const RippleCursor = () => {
 
     return () => {
       window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", addRipple);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchstart", onTouch);
+      window.removeEventListener("touchmove", onTouch);
       cancelAnimationFrame(animationFrameId);
     };
   }, [isBookingPage]);
