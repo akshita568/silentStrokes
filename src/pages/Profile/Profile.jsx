@@ -46,7 +46,7 @@ export default function Profile() {
         <div className="max-w-4xl mx-auto">
           
           {/* User Bio Header */}
-          <div className="bg-sand/10 p-8 md:p-12 rounded-sm border border-sand shadow-sm flex flex-col md:flex-row items-center gap-8 mb-12">
+          <div className="bg-sand/10 p-6 sm:p-8 md:p-12 rounded-sm border border-sand shadow-sm flex flex-col md:flex-row items-center gap-6 md:gap-8 mb-12">
             <div className="w-24 h-24 rounded-full bg-sand/30 overflow-hidden border border-sand shrink-0">
               {user?.photoURL ? (
                 <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
@@ -72,8 +72,8 @@ export default function Profile() {
           </div>
 
           {/* Section 1: Saved Inquiry Vault (Local Cart) */}
-          <div className="bg-sand/10 p-8 md:p-12 rounded-sm border border-sand shadow-sm mb-12">
-            <div className="flex justify-between items-end mb-6">
+          <div className="bg-sand/10 p-6 sm:p-8 md:p-12 rounded-sm border border-sand shadow-sm mb-12">
+            <div className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:items-end mb-6">
               <div>
                 <span className="text-xs font-bold uppercase tracking-widest text-olive mb-1 block">Selected Artworks</span>
                 <h2 className="text-2xl font-serif text-text-main">Your Saved Inquiry Vault</h2>
@@ -109,7 +109,7 @@ export default function Profile() {
           </div>
 
           {/* Section 2: Submitted Commissions */}
-          <div className="bg-sand/10 p-8 md:p-12 rounded-sm border border-sand shadow-sm mb-12">
+          <div className="bg-sand/10 p-6 sm:p-8 md:p-12 rounded-sm border border-sand shadow-sm mb-12">
             <span className="text-xs font-bold uppercase tracking-widest text-olive mb-1 block">Commissions</span>
             <h2 className="text-2xl font-serif text-text-main mb-6">Your Commission Requests</h2>
 
@@ -146,7 +146,7 @@ export default function Profile() {
           </div>
 
           {/* Section 3: General Inquiries */}
-          <div className="bg-sand/10 p-8 md:p-12 rounded-sm border border-sand shadow-sm">
+          <div className="bg-sand/10 p-6 sm:p-8 md:p-12 rounded-sm border border-sand shadow-sm">
             <span className="text-xs font-bold uppercase tracking-widest text-olive mb-1 block">Messages</span>
             <h2 className="text-2xl font-serif text-text-main mb-6">Your General Inquiries</h2>
 

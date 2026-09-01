@@ -3,11 +3,11 @@ import Container from "../../components/container/Container";
 
 const BespokeCommissions = () => {
   return (
-    <section className="py-24 bg-base-white">
+    <section className="py-16 md:py-24 bg-base-white">
       <Container>
-        <div className="bg-sand/10 rounded-sm p-8 md:p-16 flex flex-col lg:flex-row items-center gap-16 border border-sand relative overflow-hidden">
-          
-          <div className="absolute -top-24 -right-12 text-[250px] text-base-white opacity-40 font-serif italic pointer-events-none select-none">
+        <div className="bg-sand/10 rounded-sm p-6 sm:p-8 md:p-16 flex flex-col lg:flex-row items-center gap-10 lg:gap-16 border border-sand relative overflow-hidden">
+
+          <div className="absolute -top-16 -right-8 text-[130px] sm:-top-24 sm:-right-12 sm:text-[190px] md:text-[250px] text-base-white opacity-40 font-serif italic pointer-events-none select-none">
             C
           </div>
 

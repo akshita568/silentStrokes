@@ -8,6 +8,13 @@
     html {
         @apply scroll-smooth text-text-main font-sans;
     }
+    /* Safety net: immersive pages use large transformed / absolutely-positioned
+       artwork that can poke a few px past the viewport on small screens.
+       `clip` contains it without creating a scroll container, so the sticky
+       navbar and `scroll-smooth` behaviour are left untouched. */
+    body {
+        overflow-x: clip;
+    }
 }
 
 /* Base canvas texture with a light grid */
@@ -30,12 +37,23 @@ body::before {
     border-radius: 8px;
     pointer-events: none;
     z-index: 9999;
-    background-image: 
+    background-image:
         /* Organic corner flower/doodle dots */
         radial-gradient(circle at 16px 16px, rgba(112, 128, 105, 0.5) 3px, transparent 4px),
         radial-gradient(circle at calc(100% - 16px) 16px, rgba(112, 128, 105, 0.5) 3px, transparent 4px),
         radial-gradient(circle at 16px calc(100% - 16px), rgba(112, 128, 105, 0.5) 3px, transparent 4px),
         radial-gradient(circle at calc(100% - 16px) calc(100% - 16px), rgba(112, 128, 105, 0.5) 3px, transparent 4px);
+}
+
+/* Tighten the decorative sketch frame on small screens so it doesn't eat into
+   already-limited content width. */
+@media (max-width: 640px) {
+    body::before {
+        top: 6px;
+        left: 6px;
+        right: 6px;
+        bottom: 6px;
+    }
 }
 
 @layer components {
