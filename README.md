@@ -47,6 +47,56 @@ Rather than being a conventional portfolio, Silent Strokes focuses on creating a
 
 ---
 
+
+---
+
+# Project Structure
+
+```text
+silentStrokes/
+├── public/                 # Static assets (artworks, logos, redirects)
+│   └── artworks/           # Original artwork images
+├── src/
+│   ├── components/         # Reusable UI components
+│   │   ├── shared/         # Navbar, Footer, RippleCursor
+│   │   ├── pageHeader/     # Page headers
+│   │   ├── sectionTitle/   # Section titles
+│   │   └── ...             # Loading, Container, DoodleFrame, etc.
+│   ├── pages/              # Route-level page components
+│   │   ├── home/           # Landing page, hero slider, commissions
+│   │   ├── portfolio/      # Artwork gallery
+│   │   ├── shop/           # Shop and cart
+│   │   ├── auth/           # Login & Register
+│   │   ├── admin/          # Studio dashboard
+│   │   ├── bookings/       # Booking / interactive canvas
+│   │   ├── contact/        # Contact form
+│   │   └── ...
+│   ├── layout/             # Layout wrappers (Dashboard, Sidebar)
+│   ├── hooks/              # Custom React hooks (useAuth, useMediaQuery)
+│   ├── context/            # React context providers (CartProvider)
+│   ├── AuthProvider/       # Firebase auth context
+│   ├── router/             # React Router configuration
+│   ├── utils/              # Firebase config, image upload helpers
+│   ├── main.jsx            # App entry point
+│   └── index.css           # Global styles
+├── index.html
+├── package.json
+├── vite.config.js
+├── tailwind.config.js
+└── ...
+```
+
+### Key directories for contributors
+
+- **`src/pages/`** – Start here for most feature work. Each folder corresponds to a route.
+- **`src/components/`** – Shared UI building blocks used across pages.
+- **`src/router/Router.jsx`** – Central place that defines all routes.
+- **`src/utils/firebase.config.js`** – Firebase initialization.
+- **`src/AuthProvider/`** & **`src/hooks/useAuth.jsx`** – Authentication logic.
+- **`public/artworks/`** – Static image assets for the portfolio.
+
+This overview should help new contributors quickly locate the files they need to modify.
+
 # Getting Started
 
 ## 1. Clone the Repository
