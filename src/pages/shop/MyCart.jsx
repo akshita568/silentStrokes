@@ -12,7 +12,7 @@ export default function Cart() {
     <div className="min-h-screen bg-base-white text-text-main font-sans pb-32 pt-24">
       <Container>
         <div className="max-w-3xl mx-auto">
-          <div className="border-b border-sand pb-6 mb-12 flex justify-between items-end">
+          <div className="border-b border-sand pb-6 mb-12 flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-end">
             <div>
               <span className="text-xs font-bold uppercase tracking-widest text-olive mb-2 block">Collector Space</span>
               <h1 className="text-3xl md:text-4xl font-serif text-text-main">Inquiry Vault</h1>
@@ -33,9 +33,9 @@ export default function Cart() {
           ) : (
             <div className="space-y-6">
               {cart.map((item) => (
-                <div key={item._id || item.id} className="bg-sand/10 p-6 rounded-sm border border-sand flex items-center justify-between gap-6 shadow-sm">
-                  <div className="flex items-center gap-6">
-                    <div className="w-20 h-20 bg-base-white overflow-hidden border border-sand shrink-0">
+                <div key={item._id || item.id} className="bg-sand/10 p-4 sm:p-6 rounded-sm border border-sand flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 shadow-sm">
+                  <div className="flex items-center gap-4 sm:gap-6">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-base-white overflow-hidden border border-sand shrink-0">
                       <img src={item.image || item.src} alt={item.title} className="w-full h-full object-cover" />
                     </div>
                     <div>

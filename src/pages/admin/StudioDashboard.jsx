@@ -71,7 +71,7 @@ const StudioDashboard = () => {
   if (!isAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-base-white font-sans px-4">
-        <form onSubmit={handleSecretLogin} className="p-10 border border-sand shadow-sm rounded-sm w-full max-w-sm bg-base-white">
+        <form onSubmit={handleSecretLogin} className="p-6 sm:p-10 border border-sand shadow-sm rounded-sm w-full max-w-sm bg-base-white">
           <h2 className="text-xl font-serif text-text-main mb-6 text-center">Studio Access</h2>
           
           {user && !isAdmin && (
@@ -102,11 +102,11 @@ const StudioDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-sand/10 p-8 md:p-12 font-sans text-text-main pt-24">
+    <div className="min-h-screen bg-sand/10 p-5 sm:p-8 md:p-12 font-sans text-text-main pt-24">
       <div className="max-w-6xl mx-auto">
-        
+
         {/* Header & Logout */}
-        <div className="flex justify-between items-end mb-8 border-b border-sand pb-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-end mb-8 border-b border-sand pb-4">
           <div>
             <h1 className="text-3xl font-serif">Studio Dashboard</h1>
             <p className="text-sm text-dove mt-2">Welcome back, Sakshita.</p>
@@ -117,7 +117,7 @@ const StudioDashboard = () => {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex space-x-6 mb-8 border-b border-sand/50">
+        <div className="flex space-x-6 mb-8 border-b border-sand/50 overflow-x-auto">
           {["commissions", "inquiries", "users"].map((tab) => (
             <button
               key={tab}
@@ -174,11 +174,11 @@ const StudioDashboard = () => {
 
         {/* TAB 3: USERS */}
         {!fetching && activeTab === "users" && (
-          <div className="bg-base-white border border-sand rounded-sm overflow-hidden shadow-sm">
+          <div className="bg-base-white border border-sand rounded-sm overflow-x-auto shadow-sm">
             {usersList.length === 0 ? (
               <p className="text-sm text-dove p-6">No users found. Make sure user data is saving to a "users" Firestore collection upon registration.</p>
             ) : (
-              <table className="w-full text-left text-sm">
+              <table className="w-full min-w-[480px] text-left text-sm">
                 <thead className="bg-sand/20 text-xs uppercase tracking-widest text-dove">
                   <tr>
                     <th className="px-6 py-4 font-medium">Name</th>

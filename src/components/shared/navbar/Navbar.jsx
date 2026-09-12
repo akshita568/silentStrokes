@@ -158,8 +158,8 @@ const Navbar = () => {
 
       {/* MOBILE MENU DROPDOWN */}
       <div
-        className={`lg:hidden absolute top-full left-0 w-full bg-base-white border-b border-sand shadow-lg transition-all duration-300 ease-in-out ${
-          collapse ? "opacity-100 visible py-6" : "opacity-0 invisible h-0 py-0"
+        className={`lg:hidden absolute top-full left-0 w-full bg-base-white border-b border-sand shadow-lg transition-all duration-300 ease-in-out overflow-y-auto ${
+          collapse ? "opacity-100 visible py-6 max-h-[80vh]" : "opacity-0 invisible h-0 py-0 max-h-0"
         }`}
       >
         <ul className="flex flex-col gap-5 px-8 font-medium text-sm">

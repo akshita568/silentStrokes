@@ -75,7 +75,7 @@ const Login = () => {
 
   return (
     <div className="bg-base-white min-h-screen flex items-center justify-center px-4 py-20 font-sans">
-      <div className="w-full max-w-md bg-base-white p-10 border border-sand shadow-sm rounded-sm">
+      <div className="w-full max-w-md bg-base-white p-6 sm:p-10 border border-sand shadow-sm rounded-sm">
         <h2 className="text-3xl font-serif text-text-main mb-2 text-center">Welcome Back</h2>
         <p className="text-sm text-dove text-center mb-8">Log in to view your cart and commissions.</p>
         

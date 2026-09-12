@@ -75,7 +75,7 @@ const InteractiveCanvas = () => {
 
   return (
     <div className="flex flex-col items-center w-full">
-      <div className="relative w-full h-[400px] md:h-[450px] bg-base-white rounded-sm border-2 border-dashed border-sand shadow-sm overflow-hidden cursor-crosshair">
+      <div className="relative w-full h-[320px] sm:h-[400px] md:h-[450px] bg-base-white rounded-sm border-2 border-dashed border-sand shadow-sm overflow-hidden cursor-crosshair">
         
         {/* Playful CTA that vanishes completely once hasDrawn is true */}
         <div className={`absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0 transition-opacity duration-500 ${hasDrawn ? 'opacity-0' : 'opacity-100'}`}>
@@ -110,13 +110,13 @@ const InteractiveCanvas = () => {
       </div>
 
       {/* The Color Palette Toolbar */}
-      <div className="mt-6 flex items-center justify-center gap-3 bg-base-white px-6 py-3 rounded-full shadow-sm border border-sand">
-        <span className="text-xs font-bold uppercase tracking-widest text-dove mr-2">Colors:</span>
+      <div className="mt-4 sm:mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 bg-base-white px-4 sm:px-6 py-3 rounded-2xl sm:rounded-full shadow-sm border border-sand max-w-full">
+        <span className="w-full text-center sm:w-auto text-xs font-bold uppercase tracking-widest text-dove sm:mr-2">Colors:</span>
         {colors.map((color) => (
           <button
             key={color}
             onClick={() => setActiveColor(color)}
-            className={`w-7 h-7 rounded-full transition-transform duration-300 ${activeColor === color ? 'scale-125 shadow-md ring-2 ring-offset-2 ring-sand' : 'hover:scale-110 opacity-80 hover:opacity-100'}`}
+            className={`w-8 h-8 sm:w-7 sm:h-7 shrink-0 rounded-full transition-transform duration-300 ${activeColor === color ? 'scale-125 shadow-md ring-2 ring-offset-2 ring-sand' : 'hover:scale-110 opacity-80 hover:opacity-100'}`}
             style={{ backgroundColor: color }}
             title="Pick this color!"
           />
