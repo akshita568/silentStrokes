@@ -1,4 +1,4 @@
-import { useRef, useState, useContext } from "react";
+import { useRef, useState, useContext, useEffect } from "react";
 import toast from "react-hot-toast";
 import { FiAlignJustify, FiLogOut, FiUser } from "react-icons/fi";
 import { LuCommand } from "react-icons/lu";
@@ -12,15 +12,37 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [dropdownOpen, setDropDown] = useState(false);
   const [collapse, setCollapse] = useState(false);
+  const navbarRef = useRef();
   const imgRef = useRef();
   const dropdownRef = useRef();
 
-  // Close dropdown when clicking outside
-  window.addEventListener("click", (e) => {
-    if (e.target !== dropdownRef.current && e.target !== imgRef.current) {
+  // // Close dropdown when clicking outside
+  // window.addEventListener("click", (e) => {
+  //   if (e.target !== dropdownRef.current && e.target !== imgRef.current) {
+  //     setDropDown(false);
+  //   }
+  // });
+
+useEffect(() => {
+  const handleOutsideClick = (e) => {
+    if (navbarRef.current && !navbarRef.current.contains(e.target)) {
       setDropDown(false);
+      setCollapse(false);
     }
-  });
+  };
+
+  const handleScroll = () => {
+    setCollapse(false);
+  };
+
+  document.addEventListener("click", handleOutsideClick);
+  window.addEventListener("scroll", handleScroll);
+
+  return () => {
+    document.removeEventListener("click", handleOutsideClick);
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, []);
 
   const handleDropDown = () => {
     setDropDown(!dropdownOpen);
@@ -40,7 +62,10 @@ const Navbar = () => {
   const linkStyles = "text-text-main hover:text-olive transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[1px] after:bg-olive hover:after:w-full after:transition-all after:duration-300 text-sm font-bold uppercase tracking-widest";
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-base-white py-4 border-b border-sand shadow-sm transition-all">
+    <nav
+      ref={navbarRef}
+      className="sticky top-0 z-50 w-full bg-base-white py-4 border-b border-sand shadow-sm transition-all"
+    >
       <div className="flex w-full items-center justify-between px-6 md:px-10">
         
         {/* FAR LEFT: silentStrokes Logo */}
@@ -158,9 +183,11 @@ const Navbar = () => {
 
       {/* MOBILE MENU DROPDOWN */}
       <div
-        className={`lg:hidden absolute top-full left-0 w-full bg-base-white border-b border-sand shadow-lg transition-all duration-300 ease-in-out overflow-y-auto ${
-          collapse ? "opacity-100 visible py-6 max-h-[80vh]" : "opacity-0 invisible h-0 py-0 max-h-0"
-        }`}
+        className={`lg:hidden absolute top-full left-0 w-full bg-base-white border-b border-sand shadow-lg overflow-hidden transition-all duration-300 ease-in-out ${
+          collapse
+            ? "opacity-100 visible max-h-[80vh] py-6"
+            : "opacity-0 invisible max-h-0 py-0"
+      }`}
       >
         <ul className="flex flex-col gap-5 px-8 font-medium text-sm">
           <li><NavLink to="/" onClick={() => setCollapse(false)} className="text-text-main">Home</NavLink></li>
