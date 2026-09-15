@@ -173,8 +173,11 @@ useEffect(() => {
 
           {/* Mobile Hamburger Button */}
           <button
+            type="button"
+            aria-label={collapse ? "Close menu" : "Open menu"}
+            aria-expanded={collapse}
             onClick={() => setCollapse(!collapse)}
-            className="block px-2 text-text-main hover:text-olive lg:hidden transition-colors"
+            className="flex items-center justify-center min-w-11 min-h-11 px-2 text-text-main hover:text-olive lg:hidden transition-colors"
           >
             <FiAlignJustify size={24} />
           </button>
