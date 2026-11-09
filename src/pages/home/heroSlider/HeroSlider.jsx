@@ -4,27 +4,32 @@ import { useIsMobile } from "../../../hooks/useMediaQuery";
 
 // Pure curve helper — pulled out of the component so it can seed initial state.
 // Adjusted curve math to keep everything safely within the container view bounds
-const getWireY = (x, wireIndex) => {
+const getWireY = (x, wireIndex, mobile = false) => {
   const t = x / 100;
+  if (mobile) {
+    // Flatter, less overlapping curves for narrow viewports
+    if (wireIndex === 0) {
+      return Math.pow(1 - t, 2) * 18 + 2 * (1 - t) * t * 32 + Math.pow(t, 2) * 22;
+    }
+    return Math.pow(1 - t, 2) * 48 + 2 * (1 - t) * t * 58 + Math.pow(t, 2) * 52;
+  }
   if (wireIndex === 0) {
     return Math.pow(1 - t, 2) * 15 + 2 * (1 - t) * t * 55 + Math.pow(t, 2) * 20;
-  } else {
-    return Math.pow(1 - t, 2) * 35 + 2 * (1 - t) * t * 70 + Math.pow(t, 2) * 40;
   }
+  return Math.pow(1 - t, 2) * 35 + 2 * (1 - t) * t * 70 + Math.pow(t, 2) * 40;
 };
 
 // x positions of the five frames along the wall. Desktop keeps the original
-// asymmetric spread; on narrow screens the frames are pulled inward so they
-// stay reachable and never clip the viewport edges.
+// asymmetric spread; on narrow screens frames are staggered with more breathing room.
 const DESKTOP_XS = [35, 50, 65, 80, 92];
-const MOBILE_XS = [8, 27, 46, 62, 76];
+const MOBILE_XS = [5, 23, 41, 59, 76];
 
-const buildFrames = (xs) => [
-  { id: 1, img: "/artworks/comission3.png", x: xs[0], y: getWireY(xs[0], 0), rot: -4, z: 10, isInspecting: false },
-  { id: 2, img: "/artworks/skull.png", x: xs[1], y: getWireY(xs[1], 1), rot: 2, z: 11, isInspecting: false },
-  { id: 3, img: "/artworks/dog.png", x: xs[2], y: getWireY(xs[2], 0), rot: -2, z: 12, isInspecting: false },
-  { id: 4, img: "/artworks/river.png", x: xs[3], y: getWireY(xs[3], 1), rot: 3, z: 13, isInspecting: false },
-  { id: 5, img: "/artworks/forest.png", x: xs[4], y: getWireY(xs[4], 0), rot: -3, z: 14, isInspecting: false },
+const buildFrames = (xs, mobile = false) => [
+  { id: 1, img: "/artworks/comission3.png", x: xs[0], y: getWireY(xs[0], 0, mobile), rot: -4, z: 10, isInspecting: false },
+  { id: 2, img: "/artworks/skull.png", x: xs[1], y: getWireY(xs[1], 1, mobile), rot: 2, z: 11, isInspecting: false },
+  { id: 3, img: "/artworks/dog.png", x: xs[2], y: getWireY(xs[2], 0, mobile), rot: -2, z: 12, isInspecting: false },
+  { id: 4, img: "/artworks/river.png", x: xs[3], y: getWireY(xs[3], 1, mobile), rot: 3, z: 13, isInspecting: false },
+  { id: 5, img: "/artworks/forest.png", x: xs[4], y: getWireY(xs[4], 0, mobile), rot: -3, z: 14, isInspecting: false },
 ];
 
 const HeroSlider = () => {
@@ -43,7 +48,7 @@ const HeroSlider = () => {
   // visitor has dragged are intentionally reset here — a resize across the
   // breakpoint is a layout change, not a state we need to preserve.
   useEffect(() => {
-    setFrames(buildFrames(isMobile ? MOBILE_XS : DESKTOP_XS));
+    setFrames(buildFrames(isMobile ? MOBILE_XS : DESKTOP_XS, isMobile));
   }, [isMobile]);
 
   const handlePointerDown = (e, id) => {
@@ -74,8 +79,8 @@ const HeroSlider = () => {
     if (draggingId) {
       setFrames((prev) => prev.map((f) => {
         if (f.id === draggingId) {
-          const wire0Y = getWireY(f.x, 0);
-          const wire1Y = getWireY(f.x, 1);
+          const wire0Y = getWireY(f.x, 0, isMobile);
+          const wire1Y = getWireY(f.x, 1, isMobile);
 
           const dist0 = Math.abs(f.y - wire0Y);
           const dist1 = Math.abs(f.y - wire1Y);
@@ -114,7 +119,7 @@ const HeroSlider = () => {
   };
 
   const renderFrame = (frame) => {
-    const isHung = Math.abs(frame.y - getWireY(frame.x, 0)) < 1 || Math.abs(frame.y - getWireY(frame.x, 1)) < 1;
+    const isHung = Math.abs(frame.y - getWireY(frame.x, 0, isMobile)) < 1 || Math.abs(frame.y - getWireY(frame.x, 1, isMobile)) < 1;
 
     return (
       <div
@@ -137,7 +142,7 @@ const HeroSlider = () => {
           // Ensure inspected items pop over the text box, but dragged items stay under
           zIndex: frame.isInspecting ? 9999 : frame.z,
 
-          width: isMobile ? "clamp(96px, 30vw, 150px)" : "clamp(120px, 12vw, 220px)",
+          width: isMobile ? "clamp(100px, 30vw, 148px)" : "clamp(120px, 12vw, 220px)",
           aspectRatio: "4/5",
 
           // Only the painting itself locks touch gestures, so a drag on a frame
@@ -171,8 +176,17 @@ const HeroSlider = () => {
       preserveAspectRatio="none"
       viewBox="0 0 100 100"
     >
-      <path d="M 0 15 Q 50 55 100 20" fill="transparent" stroke="#D1CBC1" strokeWidth="0.15" />
-      <path d="M 0 35 Q 65 70 100 40" fill="transparent" stroke="#D1CBC1" strokeWidth="0.15" />
+      {isMobile ? (
+        <>
+          <path d="M 0 18 Q 50 32 100 22" fill="transparent" stroke="#D1CBC1" strokeWidth="0.18" />
+          <path d="M 0 48 Q 50 58 100 52" fill="transparent" stroke="#D1CBC1" strokeWidth="0.18" />
+        </>
+      ) : (
+        <>
+          <path d="M 0 15 Q 50 55 100 20" fill="transparent" stroke="#D1CBC1" strokeWidth="0.15" />
+          <path d="M 0 35 Q 65 70 100 40" fill="transparent" stroke="#D1CBC1" strokeWidth="0.15" />
+        </>
+      )}
     </svg>
   );
 
