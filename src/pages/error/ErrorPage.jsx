@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const ErrorPage = () => {
   return (
-    <section className="flex items-center h-screen p-16 bg-base-white">
+    <section className="flex items-center min-h-screen p-6 md:p-16 bg-base-white">
       <div className="container flex flex-col items-center justify-center px-5 mx-auto my-8">
         <div className="max-w-md text-center">
           <h1 className="text-8xl md:text-9xl font-serif text-olive opacity-80 mb-6 tracking-widest">
