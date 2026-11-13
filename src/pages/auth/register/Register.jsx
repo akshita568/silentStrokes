@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../../../utils/firebase.config"; 
 import { doc, setDoc } from "firebase/firestore"; 
+
+import { auth, db } from "../../../utils/firebase.config"; 
+import { Squiggle } from "../../../components/decorative/BotanicalMotifs";
 
 const Register = () => {
   const [name, setName] = useState(""); 
@@ -40,64 +42,72 @@ const Register = () => {
   };
 
   return (
-    <div className="bg-base-white min-h-screen flex items-center justify-center px-4 py-20 font-sans">
-      <div className="w-full max-w-md bg-base-white p-6 sm:p-10 border border-sand shadow-sm rounded-sm">
-        <h2 className="text-3xl font-serif text-text-main mb-2 text-center">Join silentStrokes</h2>
-        <p className="text-sm text-dove text-center mb-8">Create an account to save your favorite pieces and manage your cart.</p>
+    <div className="bg-theme-cream min-h-screen flex items-center justify-center px-4 py-12 font-sans text-theme-dark relative overflow-hidden">
+      <div className="w-full max-w-sm bg-[#FAF7F2] p-6 sm:p-8 border-[3px] border-theme-dark shadow-solid rounded-3xl relative z-10">
+        <div className="text-center mb-6">
+          <span className="text-[10px] font-black uppercase tracking-widest text-theme-dark block mb-0.5">
+            NEW COLLECTOR • REGISTER
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-black text-theme-dark uppercase tracking-tight">JOIN STUDIO</h2>
+          <div className="flex justify-center my-1.5">
+            <Squiggle className="w-14 h-2" color="#2D2D2D" />
+          </div>
+          <p className="text-xs text-theme-dark/80 font-medium">Save artwork briefs and commission slots.</p>
+        </div>
         
-        {error && <div className="bg-red-50 text-red-500 text-sm p-3 mb-6 rounded-sm border border-red-100">{error}</div>}
+        {error && <div className="bg-red-50 text-red-700 text-xs p-2.5 mb-4 rounded-xl border-2 border-red-300 font-bold">{error}</div>}
 
-        <form onSubmit={handleRegister} className="space-y-6">
-          <div className="relative">
+        <form onSubmit={handleRegister} className="space-y-3.5">
+          <div className="space-y-1">
+            <label htmlFor="name" className="text-[10px] font-black uppercase tracking-wider text-theme-dark">Full Name</label>
             <input 
               type="text" 
               id="name" 
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="peer w-full bg-transparent border-b border-sand py-2 text-text-main focus:outline-none focus:border-olive transition-colors placeholder-transparent" 
-              placeholder="Full Name" 
+              className="w-full bg-theme-cream rounded-xl px-3 py-2 text-xs text-theme-dark border-2 border-theme-dark focus:outline-none focus:ring-2 focus:ring-theme-olive font-medium" 
+              placeholder="e.g. Jane Doe" 
             />
-            <label htmlFor="name" className="absolute left-0 -top-4 text-xs font-bold uppercase tracking-widest text-dove transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-dove peer-placeholder-shown:top-2 peer-focus:-top-4 peer-focus:text-xs peer-focus:font-bold peer-focus:text-olive">Full Name</label>
           </div>
 
-          <div className="relative pt-4">
+          <div className="space-y-1">
+            <label htmlFor="email" className="text-[10px] font-black uppercase tracking-wider text-theme-dark">Email Address</label>
             <input 
               type="email" 
               id="email" 
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="peer w-full bg-transparent border-b border-sand py-2 text-text-main focus:outline-none focus:border-olive transition-colors placeholder-transparent" 
-              placeholder="Email" 
+              className="w-full bg-theme-cream rounded-xl px-3 py-2 text-xs text-theme-dark border-2 border-theme-dark focus:outline-none focus:ring-2 focus:ring-theme-olive font-medium" 
+              placeholder="name@example.com" 
             />
-            <label htmlFor="email" className="absolute left-0 -top-4 text-xs font-bold uppercase tracking-widest text-dove transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-dove peer-placeholder-shown:top-2 peer-focus:-top-4 peer-focus:text-xs peer-focus:font-bold peer-focus:text-olive">Email Address</label>
           </div>
 
-          <div className="relative pt-4">
+          <div className="space-y-1">
+            <label htmlFor="password" className="text-[10px] font-black uppercase tracking-wider text-theme-dark">Password (Min 6 characters)</label>
             <input 
               type="password" 
               id="password" 
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="peer w-full bg-transparent border-b border-sand py-2 text-text-main focus:outline-none focus:border-olive transition-colors placeholder-transparent" 
-              placeholder="Password" 
+              className="w-full bg-theme-cream rounded-xl px-3 py-2 text-xs text-theme-dark border-2 border-theme-dark focus:outline-none focus:ring-2 focus:ring-theme-olive font-medium" 
+              placeholder="••••••••" 
             />
-            <label htmlFor="password" className="absolute left-0 -top-4 text-xs font-bold uppercase tracking-widest text-dove transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-dove peer-placeholder-shown:top-2 peer-focus:-top-4 peer-focus:text-xs peer-focus:font-bold peer-focus:text-olive">Password (Min 6 characters)</label>
           </div>
 
           <button 
             type="submit" 
             disabled={isRegistering}
-            className="w-full py-4 mt-8 bg-text-main text-base-white text-xs font-bold uppercase tracking-widest hover:bg-olive transition-colors duration-300 rounded-sm disabled:opacity-70 disabled:cursor-not-allowed"
+            className="w-full py-2.5 mt-2 bg-theme-dark text-theme-cream text-xs font-black uppercase tracking-wider rounded-full shadow-solid hover:bg-theme-orange hover:text-theme-dark transition-all disabled:opacity-70 cursor-pointer border-2 border-theme-dark"
           >
-            {isRegistering ? "Creating your account..." : "Sign Up"}
+            {isRegistering ? "Creating account..." : "Sign Up"}
           </button>
         </form>
 
-        <p className="text-center text-sm text-dove mt-8">
-          Already have an account? <Link to="/login" className="text-text-main font-semibold hover:text-olive transition-colors">Log In</Link>
+        <p className="text-center text-xs text-theme-dark font-bold mt-5">
+          Already registered? <Link to="/login" className="underline font-black hover:text-theme-orange">Log In</Link>
         </p>
       </div>
     </div>
@@ -105,3 +115,4 @@ const Register = () => {
 };
 
 export default Register;
+

@@ -14,7 +14,7 @@ const ErrorPage = () => {
           </p>
           
           <p className="mt-4 mb-10 text-dove">
-            It seems we couldn't find the canvas you were looking for. Don't worry, let's guide you back to the studio.
+            It seems we couldn&apos;t find the canvas you were looking for. Don&apos;t worry, let&apos;s guide you back to the studio.
           </p>
           
           <Link

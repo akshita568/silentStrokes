@@ -1,42 +1,42 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+
 import useAuth from "../../hooks/useAuth";
 import { db } from "../../utils/firebase.config";
 import Container from "../../components/container/Container";
 import InteractiveCanvas from "./InteractiveCanvas";
+import { Squiggle } from "../../components/decorative/BotanicalMotifs";
 
 const commissionExamples = [
   { 
     id: 1, 
     title: "Classic Portrait", 
     medium: "Acrylic on A5 Canvas", 
-    img: "/artworks/comission3.png" 
+    price: "₹2,000",
+    img: "/artworks/comission3.png"
   },
   { 
     id: 4, 
     title: "Creative Concept", 
     medium: "Acrylic on A4 Canvas", 
-    img: "/artworks/dentist.png" 
+    price: "₹2,500",
+    img: "/artworks/dentist.png"
   },
   { 
     id: 2, 
     title: "Beloved Pet", 
     medium: "Acrylic on A5 Canvas", 
-    img: "/artworks/comission1.png" 
+    price: "₹2,000",
+    img: "/artworks/comission1.png"
   },
   { 
-    id: 1, 
-    title: "Classic Portrait", 
+    id: 3, 
+    title: "Quiet Landscape", 
     medium: "Acrylic on A5 Canvas", 
-    img: "/artworks/comission2.png" 
-  },
-  { 
-    id: 1, 
-    title: "Classic Portrait", 
-    medium: "Acrylic on A5 Canvas", 
-    img: "/artworks/potrait.jpeg" 
-  },
+    price: "₹2,000",
+    img: "/artworks/potrait.jpeg"
+  }
 ];
 
 const Booking = () => {
@@ -88,199 +88,278 @@ const Booking = () => {
   };
 
   return (
-    <div className="bg-base-white min-h-screen pb-16 font-sans text-text-main">
-      <section className="relative pt-24 pb-8 lg:pt-32 lg:pb-12 overflow-hidden">
+    <div className="bg-theme-cream min-h-screen pb-12 font-sans text-theme-dark">
+      <section className="relative pt-6 pb-6 lg:pt-8 lg:pb-8 overflow-hidden">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            {/* Typography & Intro */}
-            <div className="lg:col-span-5 relative z-10">
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-light text-text-main leading-[1.1] mb-6">
-                Your Vision. <br />
-                <span className="font-serif italic font-medium text-olive">My Canvas.</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+            <div className="lg:col-span-5 space-y-3">
+              <div className="inline-flex items-center gap-1.5">
+                <span className="px-3 py-0.5 bg-theme-orange text-theme-dark text-[10px] font-black uppercase tracking-widest rounded-full border-2 border-theme-dark shadow-[2px_2px_0px_#2D2D2D]">
+                  CUSTOM ATELIER • COMMISSIONS
+                </span>
+              </div>
+
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-theme-dark leading-none uppercase tracking-tight">
+                YOUR VISION. <br />
+                <span>MY CANVAS.</span>
               </h1>
-              <p className="text-base md:text-lg text-dove font-light leading-relaxed mb-4">
-                Thank you so much for your interest in my artwork! 🤍 <br/><br/>
-                Whether it is a standard face portrait or a custom concept, I would love to collaborate with you to create something beautiful for your space.
+
+              <div className="my-1.5">
+                <Squiggle className="w-16 h-2.5" color="#2D2D2D" />
+              </div>
+
+              <p className="text-xs sm:text-sm text-theme-dark/90 leading-relaxed font-medium">
+                Thank you so much for your interest in my artwork! 🤍 Whether it is an expressive portrait of a loved one or a bespoke concept, I would love to collaborate with you.
               </p>
+
+              <div className="pt-1">
+                <span className="text-[11px] font-black uppercase tracking-wider text-theme-dark border-b-2 border-theme-dark pb-0.5">
+                  Try sketching your idea on the pad to the right →
+                </span>
+              </div>
             </div>
 
-            {/* The Cute Interactive Canvas Component */}
-            <div className="lg:col-span-7 relative w-full mt-4 lg:mt-0">
+            <div className="lg:col-span-7 relative w-full">
               <InteractiveCanvas />
             </div>
-
           </div>
         </Container>
       </section>
 
       <Container>
-        <div className="py-8 lg:py-12 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          
-          {/* 2. The Process & Pricing Description */}
-          <div>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-olive mb-3">How It Works</h2>
-            <h3 className="text-3xl font-light text-text-main mb-6">
-              Let's create something <span className="font-semibold">magical. ✨</span>
-            </h3>
+        <div className="py-4 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-start">
+          <div className="relative space-y-6 px-1 sm:px-2 py-1">
+            <div>
+              <div className="inline-flex items-center gap-1.5 mb-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-theme-orange border border-theme-dark" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-theme-dark">
+                  HOW IT WORKS • STUDIO PROCESS
+                </span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-black text-theme-dark uppercase tracking-tight leading-tight">
+                LET&apos;S CREATE <br />
+                <span>SOMETHING SPECIAL.</span>
+              </h3>
+              <div className="mt-2">
+                <Squiggle className="w-16 h-2" color="#2D2D2D" />
+              </div>
+            </div>
             
-            <div className="space-y-6 mb-10">
-              <div className="border-l-2 border-sand pl-6 relative before:absolute before:-left-[7px] before:top-1.5 before:w-3 before:h-3 before:bg-sand before:rounded-full">
-                <h4 className="text-base font-semibold text-text-main mb-1">1. Consultation & Quote</h4>
-                <p className="text-sm text-dove leading-relaxed">Let me know what you'd like painted! We will discuss the size, medium, and complexity to finalize the cost.</p>
+            <div className="space-y-3.5">
+              <div className="flex gap-4 items-start p-4 rounded-2xl bg-[#FAF7F2] border-2 border-theme-dark shadow-sm hover:translate-x-1 transition-transform">
+                <span className="w-7 h-7 rounded-full bg-theme-dark text-theme-cream font-black text-xs flex items-center justify-center shrink-0 border border-theme-dark mt-0.5">
+                  01
+                </span>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-black text-theme-dark uppercase tracking-tight">Consultation & Quote</h4>
+                  <p className="text-[11px] text-theme-dark/80 leading-relaxed font-medium mt-0.5">
+                    Share photos, dimensions, and subject details to confirm your quote.
+                  </p>
+                </div>
               </div>
-              <div className="border-l-2 border-sand pl-6 relative before:absolute before:-left-[7px] before:top-1.5 before:w-3 before:h-3 before:bg-sand before:rounded-full">
-                <h4 className="text-base font-semibold text-text-main mb-1">2. Advance Payment</h4>
-                <p className="text-sm text-dove leading-relaxed">To officially confirm your commission and secure your spot, I require a 50% non-refundable advance payment.</p>
+
+              <div className="flex gap-4 items-start p-4 rounded-2xl bg-[#FAF7F2] border-2 border-theme-dark shadow-sm hover:translate-x-1 transition-transform">
+                <span className="w-7 h-7 rounded-full bg-theme-dark text-theme-cream font-black text-xs flex items-center justify-center shrink-0 border border-theme-dark mt-0.5">
+                  02
+                </span>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-black text-theme-dark uppercase tracking-tight">50% Advance & Sketches</h4>
+                  <p className="text-[11px] text-theme-dark/80 leading-relaxed font-medium mt-0.5">
+                    Reserve your monthly slot. I share compositional sketches before painting.
+                  </p>
+                </div>
               </div>
-              <div className="border-l-2 border-transparent pl-6 relative before:absolute before:-left-[7px] before:top-1.5 before:w-3 before:h-3 before:bg-olive before:rounded-full">
-                <h4 className="text-base font-semibold text-text-main mb-1">3. Review & Dispatch</h4>
-                <p className="text-sm text-dove leading-relaxed">Once the painting is completed, I will share detailed photos with you. The remaining balance is paid, and the artwork is carefully shipped to your door!</p>
+
+              <div className="flex gap-4 items-start p-4 rounded-2xl bg-[#FAF7F2] border-2 border-theme-dark shadow-sm hover:translate-x-1 transition-transform">
+                <span className="w-7 h-7 rounded-full bg-theme-dark text-theme-cream font-black text-xs flex items-center justify-center shrink-0 border border-theme-dark mt-0.5">
+                  03
+                </span>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-black text-theme-dark uppercase tracking-tight">Varnish & Delivery</h4>
+                  <p className="text-[11px] text-theme-dark/80 leading-relaxed font-medium mt-0.5">
+                    Review final photos, complete remaining balance, and receive safe tracked delivery.
+                  </p>
+                </div>
               </div>
             </div>
 
-            {/* Pricing Info block */}
-            <div className="bg-sand/10 p-6 md:p-8 border border-sand shadow-sm rounded-sm">
-              <h4 className="text-sm font-bold uppercase tracking-widest text-text-main mb-4 border-b border-sand pb-2">Investment Details</h4>
-              <ul className="space-y-3 text-sm text-dove">
-                <li className="flex justify-between"><span>A5 Acrylic Portrait</span> <span className="font-medium text-text-main">Starts at ₹2,000</span></li>
-                <li className="flex justify-between"><span>A5 Oil Portrait</span> <span className="font-medium text-text-main">Starts at ₹2,500</span></li>
-                <li className="pt-2 text-xs italic text-dove/80">* Larger canvas sizes are available at higher rates. Final cost varies by artwork complexity.</li>
+            <div className="bg-[#FAF7F2] p-5 sm:p-6 rounded-2xl border-2 border-theme-dark shadow-sm space-y-3">
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-theme-dark border-b-2 border-theme-dark/20 pb-1.5 flex items-center justify-between">
+                <span>STANDARD INVESTMENT</span>
+                <span className="text-[9px] text-theme-dark/60 font-medium">CUSTOM SIZES ON REQUEST</span>
+              </h4>
+              <ul className="space-y-2.5 text-xs text-theme-dark">
+                <li className="flex justify-between items-center font-black">
+                  <span>A5 Acrylic Portrait</span> 
+                  <span className="bg-theme-olive text-theme-dark px-2.5 py-0.5 rounded-full text-[10px] border border-theme-dark">Starts at ₹2,000</span>
+                </li>
+                <li className="flex justify-between items-center font-black">
+                  <span>A5 Oil Portrait</span> 
+                  <span className="bg-theme-orange text-theme-dark px-2.5 py-0.5 rounded-full text-[10px] border border-theme-dark">Starts at ₹2,500</span>
+                </li>
               </ul>
-              
-              <div className="mt-6 pt-4 border-t border-sand text-xs md:text-sm text-dove leading-relaxed">
-                <strong className="text-text-main font-medium">Shipping:</strong> Shipping charges are borne by the buyer. Since I'm an independent artist and don't have a partnership with any shipping company, all orders are shipped through trusted local courier services from my studio in Himachal Pradesh. Shipping costs are the standard rates you'd pay when sending a parcel to someone in another city.
+              <div className="pt-2.5 border-t border-theme-dark/20 text-[10.5px] text-theme-dark/90 leading-relaxed font-medium">
+                <strong>Shipping:</strong> Shipping is done via local courier companies. Delivery charges can vary (approx. ₹200 or more depending on location) and must be paid by the customer before the painting gets shipped.
               </div>
             </div>
           </div>
 
-          <div className="bg-base-white p-6 md:p-10 border border-sand shadow-sm rounded-sm">
-            <h3 className="text-2xl font-serif text-text-main mb-2">Commission Request</h3>
-            <p className="text-sm text-dove mb-6">Fill out the form below and I'll get back to you as soon as possible.</p>
+          <div className="relative bg-[#FAF7F2] p-7 sm:p-8 rounded-3xl border-[3px] border-theme-dark shadow-solid">
+            <div className="mb-4">
+              <span className="text-[10px] font-black uppercase tracking-widest text-theme-dark mb-0.5 block">
+                COMMISSION INQUIRY
+              </span>
+              <h3 className="text-xl sm:text-2xl font-black text-theme-dark uppercase tracking-tight">RESERVE YOUR SLOT</h3>
+              <p className="text-[11px] text-theme-dark/80 mt-0.5 font-medium">
+                Fill in your brief below and I will review and get back to you personally.
+              </p>
+            </div>
             
-            <form onSubmit={handleSubmit} className="space-y-6">
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="relative">
+            <form onSubmit={handleSubmit} className="space-y-3.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label htmlFor="name" className="text-[10px] font-black uppercase tracking-wider text-theme-dark">
+                    Your Name
+                  </label>
                   <input 
                     type="text" 
                     id="name" 
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="peer w-full bg-transparent border-b border-sand py-2 text-text-main focus:outline-none focus:border-olive transition-colors placeholder-transparent" 
-                    placeholder="Name" 
+                    className="w-full bg-theme-cream rounded-xl px-3 py-2 text-xs text-theme-dark border-2 border-theme-dark focus:outline-none focus:ring-2 focus:ring-theme-olive font-medium" 
+                    placeholder="e.g. Akshita" 
                     required
                   />
-                  <label htmlFor="name" className="absolute left-0 -top-4 text-[10px] md:text-xs font-bold uppercase tracking-widest text-dove transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-dove peer-placeholder-shown:top-2 peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-focus:-top-4 peer-focus:text-[10px] md:peer-focus:text-xs peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest peer-focus:text-olive">Your Name</label>
                 </div>
-                <div className="relative">
+                <div className="space-y-1">
+                  <label htmlFor="email" className="text-[10px] font-black uppercase tracking-wider text-theme-dark">
+                    Email Address
+                  </label>
                   <input 
                     type="email" 
                     id="email" 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="peer w-full bg-transparent border-b border-sand py-2 text-text-main focus:outline-none focus:border-olive transition-colors placeholder-transparent" 
-                    placeholder="Email" 
+                    className="w-full bg-theme-cream rounded-xl px-3 py-2 text-xs text-theme-dark border-2 border-theme-dark focus:outline-none focus:ring-2 focus:ring-theme-olive font-medium" 
+                    placeholder="name@example.com" 
                     required
                   />
-                  <label htmlFor="email" className="absolute left-0 -top-4 text-[10px] md:text-xs font-bold uppercase tracking-widest text-dove transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-dove peer-placeholder-shown:top-2 peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-focus:-top-4 peer-focus:text-[10px] md:peer-focus:text-xs peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest peer-focus:text-olive">Email Address</label>
                 </div>
               </div>
 
-              <div className="relative">
+              <div className="space-y-1">
+                <label htmlFor="location" className="text-[10px] font-black uppercase tracking-wider text-theme-dark">
+                  Shipping City & State
+                </label>
                 <input 
                   type="text" 
                   id="location" 
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="peer w-full bg-transparent border-b border-sand py-2 text-text-main focus:outline-none focus:border-olive transition-colors placeholder-transparent" 
-                  placeholder="Location" 
+                  className="w-full bg-theme-cream rounded-xl px-3 py-2 text-xs text-theme-dark border-2 border-theme-dark focus:outline-none focus:ring-2 focus:ring-theme-olive font-medium" 
+                  placeholder="e.g. Hamirpur, Himachal Pradesh" 
                   required
                 />
-                <label htmlFor="location" className="absolute left-0 -top-4 text-[10px] md:text-xs font-bold uppercase tracking-widest text-dove transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-dove peer-placeholder-shown:top-2 peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-focus:-top-4 peer-focus:text-[10px] md:peer-focus:text-xs peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest peer-focus:text-olive">Shipping City & State</label>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                <div>
-                  <label className="block text-[10px] md:text-xs font-bold uppercase tracking-widest text-dove mb-2">Medium Preference</label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label htmlFor="medium" className="text-[10px] font-black uppercase tracking-wider text-theme-dark block">
+                    Medium
+                  </label>
                   <select 
+                    id="medium"
                     value={medium}
                     onChange={(e) => setMedium(e.target.value)}
-                    className="w-full bg-transparent border-b border-sand pb-2 focus:outline-none focus:border-olive transition-colors text-text-main text-sm"
+                    className="w-full bg-theme-cream rounded-xl px-3 py-2 text-xs text-theme-dark border-2 border-theme-dark focus:outline-none focus:ring-2 focus:ring-theme-olive font-medium cursor-pointer"
                     required
                   >
-                    <option value="">Select a medium...</option>
-                    <option value="acrylic">Acrylic</option>
-                    <option value="oil">Oil</option>
-                    <option value="undecided">Not sure yet</option>
+                    <option value="">Select medium...</option>
+                    <option value="acrylic">Acrylic on Canvas</option>
+                    <option value="oil">Oil on Canvas</option>
+                    <option value="undecided">Not sure yet (let&apos;s decide)</option>
                   </select>
                 </div>
-                <div>
-                  <label className="block text-[10px] md:text-xs font-bold uppercase tracking-widest text-dove mb-2">Canvas Size</label>
+                <div className="space-y-1">
+                  <label htmlFor="size" className="text-[10px] font-black uppercase tracking-wider text-theme-dark block">
+                    Canvas Size
+                  </label>
                   <select 
+                    id="size"
                     value={size}
                     onChange={(e) => setSize(e.target.value)}
-                    className="w-full bg-transparent border-b border-sand pb-2 focus:outline-none focus:border-olive transition-colors text-text-main text-sm"
+                    className="w-full bg-theme-cream rounded-xl px-3 py-2 text-xs text-theme-dark border-2 border-theme-dark focus:outline-none focus:ring-2 focus:ring-theme-olive font-medium cursor-pointer"
                     required
                   >
-                    <option value="">Select a size...</option>
+                    <option value="">Select size...</option>
                     <option value="A5">A5 (Standard)</option>
-                    <option value="A4">A4 (Medium)</option>
-                    <option value="custom">Larger / Custom Size</option>
+                    <option value="A4">A4 (Statement)</option>
+                    <option value="custom">Custom Size</option>
                   </select>
                 </div>
               </div>
               
-              <div className="relative pt-2">
+              <div className="space-y-1">
+                <label htmlFor="vision" className="text-[10px] font-black uppercase tracking-wider text-theme-dark block">
+                  Vision / Description
+                </label>
                 <textarea 
                   id="vision" 
                   rows="3" 
                   value={vision}
                   onChange={(e) => setVision(e.target.value)}
-                  className="peer w-full bg-transparent border-b border-sand py-2 text-text-main focus:outline-none focus:border-olive transition-colors resize-none placeholder-transparent" 
-                  placeholder="Vision"
+                  className="w-full bg-theme-cream rounded-xl px-3 py-2 text-xs text-theme-dark border-2 border-theme-dark focus:outline-none focus:ring-2 focus:ring-theme-olive resize-none font-medium" 
+                  placeholder="Describe your idea or desired colors..."
                   required
-                ></textarea>
-                <label htmlFor="vision" className="absolute left-0 -top-4 text-[10px] md:text-xs font-bold uppercase tracking-widest text-dove transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-dove peer-placeholder-shown:top-2 peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-focus:-top-4 peer-focus:text-[10px] md:peer-focus:text-xs peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest peer-focus:text-olive">What would you like painted?</label>
+                />
               </div>
               
               <button 
                 type="submit" 
                 disabled={loading}
-                className="w-full py-3 md:py-4 mt-4 bg-text-main text-base-white text-[10px] md:text-xs font-bold uppercase tracking-widest hover:bg-olive transition-colors duration-300 rounded-sm disabled:opacity-50 cursor-pointer"
+                className="w-full py-3 bg-theme-dark text-theme-cream text-xs font-black uppercase tracking-wider rounded-full shadow-solid hover:bg-theme-orange hover:text-theme-dark transition-all disabled:opacity-50 cursor-pointer active:scale-95 border-2 border-theme-dark"
               >
-                {loading ? "Submitting..." : "Send Request ✨"}
+                {loading ? "Submitting..." : "Send Commission Request ✨"}
               </button>
             </form>
           </div>
         </div>
 
-        <div className="mt-12 md:mt-16 border-t border-sand pt-12 md:pt-16">
-          <div className="text-center mb-10 md:mb-12 max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-olive mb-3 block">
-              Portfolio
-            </span>
-            <h2 className="text-3xl md:text-4xl font-serif text-text-main mb-4">
-              Past Commissions
-            </h2>
-            <p className="text-dove text-sm leading-relaxed">
-              A glimpse into some of the special pieces I have created for collectors. From beloved pets to cherished memories, every painting is crafted with intention.
+        <div className="mt-7 border-t-2 border-theme-dark/20 pt-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-4 gap-2">
+            <div>
+              <span className="text-[10px] font-black uppercase tracking-widest text-theme-dark block mb-0.5">
+                ARCHIVES • PREVIOUS WORKS
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-theme-dark uppercase tracking-tight">
+                PAST COMMISSIONS
+              </h2>
+            </div>
+            <p className="text-xs text-theme-dark/80 max-w-xs font-medium">
+              Every piece is hand-painted and protected with museum-grade varnish.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {commissionExamples.map((item) => (
-              <div key={item.id} className="group cursor-pointer flex flex-col">
-                <div className="aspect-[4/5] overflow-hidden bg-sand/10 border border-sand/50 mb-4 md:mb-6 rounded-sm shadow-sm group-hover:shadow-md transition-shadow duration-500">
-                  <img
-                    src={item.img}
-                    alt={item.title}
-                    className="w-full h-full object-cover filter grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-                  />
-                </div>
-                <div className="text-center mt-auto">
-                  <h4 className="text-text-main font-serif text-lg">{item.title}</h4>
-                  <p className="text-[10px] md:text-xs text-olive uppercase tracking-widest mt-1 md:mt-2">{item.medium}</p>
+              <div key={item.id} className="bg-[#FAF7F2] rounded-3xl border-[3px] border-theme-dark p-6 shadow-solid flex flex-col justify-between hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
+                <div>
+                  <div className="relative w-full h-auto bg-[#ECE8DF] p-2 border-2 border-theme-dark/40 shadow-inner mb-3 flex items-center justify-center">
+                    <img
+                      src={item.img}
+                      alt={item.title}
+                      className="w-full h-auto object-contain block rounded-none filter contrast-[1.02]"
+                    />
+                    <div className="absolute bottom-2.5 right-2.5 px-2.5 py-0.5 bg-theme-orange text-theme-dark font-black text-[10px] rounded-full border border-theme-dark shadow-sm">
+                      {item.price}
+                    </div>
+                  </div>
+                  <h4 className="text-theme-dark font-black text-sm uppercase tracking-tight">
+                    {item.title}
+                  </h4>
+                  <p className="text-[10px] text-theme-dark/70 font-bold uppercase tracking-wider">
+                    {item.medium}
+                  </p>
                 </div>
               </div>
             ))}
@@ -292,3 +371,4 @@ const Booking = () => {
 };
 
 export default Booking;
+

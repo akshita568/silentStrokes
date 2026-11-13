@@ -7,16 +7,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        'mint': '#B4E4D6',     
-        'olive': '#7B895B',    
-        'sand': '#E3D5CA',     
-        'lilac': '#DCD0FF',    
-        'dove': '#8C8C8C',     
-        'base-white': '#FAFAFA',
-        'text-main': '#2d373c' // Keeping a dark slate for readable text
+        'theme-cream': '#F9F6F0', // Soft, warm off-white for main backgrounds
+        'theme-yellow': '#FDF5E6', // Warm, pastel yellow for navbar and soft accents
+        'theme-olive': '#7B8E61', // Pastel olive green 
+        'theme-orange': '#F0A868', // Warm pastel orange for accents
+        'theme-dark': '#2D2D2D', // Deep charcoal for high-contrast text/borders
       },
-      fontFamily: {
-        'sans': ['Inter', 'sans-serif'], 
+      boxShadow: {
+        'solid': '0 12px 28px -4px rgba(45, 45, 45, 0.14), 0 6px 12px -3px rgba(45, 45, 45, 0.08)', // Soft, diffused charcoal shadow replacing harsh solid
+        'soft': '0 8px 20px -3px rgba(45, 45, 45, 0.12), 0 4px 8px -2px rgba(45, 45, 45, 0.06)',
       }
     },
   },

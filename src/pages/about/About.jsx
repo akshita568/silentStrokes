@@ -1,20 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from "react";
 
-// --- DATA: 8 Photographs without forced ratios or titles ---
+import { Squiggle } from "../../components/decorative/BotanicalMotifs";
+
 const scatterItems = [
-  // Scatter init from main. Tidy pitch > max card width so photos never overlap.
-  // Cards use clamp(~100px, vw, ~200px); desktop tidy pitch 280px, mobile 120px.
-  { id: 'p1', src: '/about/photos/photo1.png', initX: -320, initY: -120, rot: -12, tidyX: -420, tidyY: -220, mobileInitX: -118, mobileInitY: -210, mobileRot: -18, mobileTidyX: -180, mobileTidyY: -200 },
-  { id: 'p2', src: '/about/photos/photo2.png', initX: -80, initY: -160, rot: 5, tidyX: -140, tidyY: -220, mobileInitX: 55, mobileInitY: -165, mobileRot: 11, mobileTidyX: -60, mobileTidyY: -200 },
-  { id: 'p3', src: '/about/photos/photo3.png', initX: 180, initY: -140, rot: 15, tidyX: 140, tidyY: -220, mobileInitX: -35, mobileInitY: -55, mobileRot: 22, mobileTidyX: 60, mobileTidyY: -200 },
-  { id: 'p4', src: '/about/photos/photo4.png', initX: 340, initY: -80, rot: -8, tidyX: 420, tidyY: -220, mobileInitX: 125, mobileInitY: -230, mobileRot: -9, mobileTidyX: 180, mobileTidyY: -200 },
-  { id: 'p5', src: '/about/photos/photo5.png', initX: -290, initY: 150, rot: 20, tidyX: -420, tidyY: 220, mobileInitX: -140, mobileInitY: 70, mobileRot: 16, mobileTidyX: -180, mobileTidyY: 200 },
-  { id: 'p6', src: '/about/photos/photo6.png', initX: -40, initY: 180, rot: -5, tidyX: -140, tidyY: 220, mobileInitX: 80, mobileInitY: 200, mobileRot: -14, mobileTidyX: -60, mobileTidyY: 200 },
-  { id: 'p7', src: '/about/photos/photo7.png', initX: 220, initY: 160, rot: 8, tidyX: 140, tidyY: 220, mobileInitX: -70, mobileInitY: 145, mobileRot: 7, mobileTidyX: 60, mobileTidyY: 200 },
-  { id: 'p8', src: '/about/photos/photo8.png', initX: 360, initY: 120, rot: -14, tidyX: 420, tidyY: 220, mobileInitX: 135, mobileInitY: 55, mobileRot: -21, mobileTidyX: 180, mobileTidyY: 200 },
+  { id: "p1", src: "/about/photos/photo1.png", initX: -320, initY: -120, rot: -12, tidyX: -360, tidyY: -170 },
+  { id: "p2", src: "/about/photos/photo2.png", initX: -80, initY: -160, rot: 5, tidyX: -120, tidyY: -170 },
+  { id: "p3", src: "/about/photos/photo3.png", initX: 180, initY: -140, rot: 15, tidyX: 120, tidyY: -170 },
+  { id: "p4", src: "/about/photos/photo4.png", initX: 340, initY: -80, rot: -8, tidyX: 360, tidyY: -170 },
+  { id: "p5", src: "/about/photos/photo5.png", initX: -290, initY: 150, rot: 20, tidyX: -360, tidyY: 170 },
+  { id: "p6", src: "/about/photos/photo6.png", initX: -40, initY: 180, rot: -5, tidyX: -120, tidyY: 170 },
+  { id: "p7", src: "/about/photos/photo7.png", initX: 220, initY: 160, rot: 8, tidyX: 120, tidyY: 170 },
+  { id: "p8", src: "/about/photos/photo8.png", initX: 360, initY: 120, rot: -14, tidyX: 360, tidyY: 170 }
 ];
 
-// --- UNIVERSAL PHYSICS DRAGGABLE COMPONENT ---
 const DraggableItem = ({ item, setTopIndex, baseZ, isTidy }) => {
   const cardRef = useRef(null);
   const isDragging = useRef(false);
@@ -33,42 +31,32 @@ const DraggableItem = ({ item, setTopIndex, baseZ, isTidy }) => {
     }
   };
 
-  const pickPos = (mode) => {
-    const mobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    if (mobile) {
-      if (mode === 'tidy') {
-        return { x: item.mobileTidyX ?? item.tidyX * 0.35, y: item.mobileTidyY ?? item.tidyY * 0.35 };
-      }
-      return { x: item.mobileInitX ?? item.initX * 0.35, y: item.mobileInitY ?? item.initY * 0.35 };
-    }
-    if (mode === 'tidy') return { x: item.tidyX, y: item.tidyY };
-    return { x: item.initX, y: item.initY };
-  };
-
   useEffect(() => {
-    offset.current = pickPos('scatter');
+    const mult = window.innerWidth < 768 ? 0.4 : 1;
+    offset.current = { x: item.initX * mult, y: item.initY * mult };
     updateStyle();
-  }, [item.initX, item.initY, item.mobileInitX, item.mobileInitY]);
+  }, [item.initX, item.initY]);
 
   useEffect(() => {
     if (isDragging.current) return; 
 
     cancelAnimationFrame(raf.current);
-    if (cardRef.current) cardRef.current.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.2, 1)';
+    if (cardRef.current) cardRef.current.style.transition = "transform 0.8s cubic-bezier(0.25, 1, 0.2, 1)";
+    
+    const mult = window.innerWidth < 768 ? 0.4 : 1;
     
     if (isTidy) {
-      offset.current = pickPos('tidy');
+      offset.current = { x: item.tidyX * mult, y: item.tidyY * mult };
       rot.current = 0;
     } else {
-      offset.current = pickPos('scatter');
-      const mobile = typeof window !== 'undefined' && window.innerWidth < 768;
-      rot.current = mobile && item.mobileRot != null ? item.mobileRot : item.rot;
+      offset.current = { x: item.initX * mult, y: item.initY * mult };
+      rot.current = item.rot;
     }
     
     updateStyle();
     
     const timer = setTimeout(() => {
-      if (cardRef.current) cardRef.current.style.transition = 'none';
+      if (cardRef.current) cardRef.current.style.transition = "none";
     }, 800);
     
     return () => clearTimeout(timer);
@@ -84,10 +72,10 @@ const DraggableItem = ({ item, setTopIndex, baseZ, isTidy }) => {
     cancelAnimationFrame(raf.current);
     
     if (cardRef.current) {
-      cardRef.current.style.transition = 'none';
-      cardRef.current.style.cursor = 'grabbing';
-      cardRef.current.style.boxShadow = '0 25px 50px -12px rgba(62, 58, 53, 0.3)';
-      cardRef.current.style.scale = '1.05'; 
+      cardRef.current.style.transition = "none";
+      cardRef.current.style.cursor = "grabbing";
+      cardRef.current.style.boxShadow = "6px 6px 0px #2D2D2D";
+      cardRef.current.style.scale = "1.04"; 
     }
     e.currentTarget.setPointerCapture(e.pointerId);
   };
@@ -107,49 +95,44 @@ const DraggableItem = ({ item, setTopIndex, baseZ, isTidy }) => {
         x: velocity.current.x * 0.4 + instantVx * 0.6,
         y: velocity.current.y * 0.4 + instantVy * 0.6
       };
-      lastTime.current = now;
     }
-    
+
+    lastMouse.current = { x: e.clientX, y: e.clientY };
+    lastTime.current = now;
+
     offset.current.x += dx;
     offset.current.y += dy;
-    rot.current += dx * 0.04; 
-    
-    lastMouse.current = { x: e.clientX, y: e.clientY };
+    rot.current += dx * 0.05;
+
     updateStyle();
   };
 
   const handlePointerUp = (e) => {
+    if (!isDragging.current) return;
     isDragging.current = false;
     e.currentTarget.releasePointerCapture(e.pointerId);
-    
+
     if (cardRef.current) {
-      cardRef.current.style.cursor = 'grab';
-      cardRef.current.style.boxShadow = '0 10px 15px -3px rgba(62, 58, 53, 0.1)';
-      cardRef.current.style.scale = '1';
+      cardRef.current.style.cursor = "grab";
+      cardRef.current.style.boxShadow = "4px 4px 0px #2D2D2D";
+      cardRef.current.style.scale = "1";
     }
 
-    const now = performance.now();
-    if (now - lastTime.current > 60) {
-      velocity.current = { x: 0, y: 0 };
-    }
+    const step = () => {
+      velocity.current.x *= 0.92;
+      velocity.current.y *= 0.92;
 
-    let vx = velocity.current.x;
-    let vy = velocity.current.y;
+      offset.current.x += velocity.current.x;
+      offset.current.y += velocity.current.y;
+      rot.current += velocity.current.x * 0.04;
 
-    const momentumLoop = () => {
-      if (Math.abs(vx) < 0.5 && Math.abs(vy) < 0.5) return;
-      
-      offset.current.x += vx;
-      offset.current.y += vy;
-      rot.current += vx * 0.015; 
-      
-      vx *= 0.95; 
-      vy *= 0.95;
-      
       updateStyle();
-      raf.current = requestAnimationFrame(momentumLoop);
+
+      if (Math.abs(velocity.current.x) > 0.1 || Math.abs(velocity.current.y) > 0.1) {
+        raf.current = requestAnimationFrame(step);
+      }
     };
-    momentumLoop();
+    raf.current = requestAnimationFrame(step);
   };
 
   return (
@@ -158,24 +141,23 @@ const DraggableItem = ({ item, setTopIndex, baseZ, isTidy }) => {
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
-      className="absolute top-1/2 left-1/2 p-2 sm:p-3 bg-[#FAFAFA] shadow-lg border border-[#DCD9CE] touch-none cursor-grab"
-      style={{
-        zIndex,
-        width: 'clamp(96px, 26vw, 170px)',
-        transformOrigin: 'center center'
+      className="absolute top-1/2 left-1/2 p-2 pb-4 bg-[#FAF7F2] border-[3px] border-theme-dark shadow-solid rounded-xl touch-none cursor-grab"
+      style={{ 
+        zIndex, 
+        width: "clamp(170px, 17vw, 240px)", 
+        transformOrigin: "center center"
       }}
     >
       <img 
         src={item.src} 
         alt="Gallery Photo" 
-        className="w-full h-auto pointer-events-none rounded-[2px]" 
+        className="w-full h-auto pointer-events-none rounded-none filter contrast-[1.02]" 
         draggable="false"
       />
     </div>
   );
 };
 
-// --- MAIN ABOUT PAGE ---
 export default function About() {
   const [topIndex, setTopIndex] = useState(10);
   const [isTidy, setIsTidy] = useState(false);
@@ -186,119 +168,84 @@ export default function About() {
   };
 
   return (
-    <div className="min-h-screen overflow-x-clip bg-[#F7F3EB] text-[#3E3A35] font-sans selection:bg-[#7A8762] selection:text-[#F7F3EB]">
-      
-      <div 
-        className="pointer-events-none fixed inset-0 z-50 opacity-[0.25] mix-blend-multiply"
-        style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E")` 
-        }}
-      />
+    <div className="min-h-screen bg-theme-cream text-theme-dark font-sans selection:bg-theme-olive selection:text-theme-dark relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6 pt-6 sm:pt-8 pb-12 relative z-10">
+        <section className="flex flex-col-reverse md:flex-row items-center gap-8 lg:gap-12 mb-10">
+          <div className="flex-1 space-y-3.5 text-sm md:text-base leading-relaxed text-theme-dark/90">
+            <div className="inline-flex items-center gap-1.5">
+              <span className="px-3 py-0.5 bg-theme-orange text-theme-dark text-[10px] font-black uppercase tracking-widest rounded-full border-2 border-theme-dark shadow-[2px_2px_0px_#2D2D2D]">
+                THE ARTIST • BIOGRAPHY
+              </span>
+            </div>
 
-      <div className="max-w-6xl mx-auto px-6 pt-24 sm:pt-32 pb-24">
-        
-        {/* --- EDITORIAL HERO SECTION --- */}
-        <section className="flex flex-col-reverse md:flex-row items-center gap-16 lg:gap-24 mb-40">
-          <div className="flex-1 space-y-8 text-lg leading-relaxed text-[#514D48]">
-            <h1 className="text-5xl md:text-7xl font-serif text-[#3E3A35] tracking-widest uppercase mb-10">
-              About
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-theme-dark uppercase tracking-tight leading-none">
+              ABOUT THE <br />
+              <span>ARTIST &amp; MAKER</span>
             </h1>
-            <p>
-              Hi, I'm Akshita.
-            </p>
-            <p>
 
-              I'm the person behind this website and every piece of art you'll find here. I'm currently a third year Computer Science undergraduate at NIT Hamirpur, and this website is much more than just another project to me, it's something I've dreamed of without even realizing it. I've been creating art for as long as I can remember and never once, when I was younger, did I imagine I'd someday build an entire website just to showcase my work, let alone sell it. It still feels surreal to think that people would actually want to own something I've created with my own hands. Art has always been a huge part of who I am. It's where I find peace, where I express myself, and honestly, it's one of the things that  defines me the most. But there's more to me than just art.
+            <div className="my-1.5">
+              <Squiggle className="w-16 h-2" color="#2D2D2D" />
+            </div>
+
+            <p className="font-black text-lg text-theme-dark uppercase tracking-wide">
+              Hi, I&apos;m Akshita.
             </p>
-            <p>
-              I love travelling and taking pictures wherever I go. I also love dancing. I trained at a dance studio for about six or seven months when I was in seventh grade, and I've loved moving to music ever since. In college, I've been part of dance clubs and have performed on stage at various events, and it's still one of my favorite ways to express myself.
+            <p className="text-xs sm:text-sm leading-relaxed font-medium">
+              I&apos;m the person behind this website and every piece of art you&apos;ll find here. I&apos;m currently a third year Computer Science undergraduate at NIT Hamirpur, and this website is much more than just another project to me — it&apos;s something I&apos;ve dreamed of without even realizing it.
             </p>
-            <p>
-              I'm endlessly curious and enjoy picking up little creative hobbies just to see if I can make something with my own hands. Whether it's cooking, crocheting, stitching, or trying any random crafty project that catches my eye, I find joy in creating. I also love travelling, clicking photos along the way, and dancing whenever I get the chance.
-              Whether it's with code, paint, yarn, or a camera, I simply love creating things.
+            <p className="text-xs sm:text-sm leading-relaxed font-medium">
+              I&apos;ve been creating art for as long as I can remember and never once, when I was younger, did I imagine I&apos;d someday build an entire website just to showcase my work, let alone sell it. It still feels surreal to think that people would actually want to own something I&apos;ve created with my own hands.
             </p>
-            <p>So, thank you for stopping by. I hope you enjoy exploring this little corner of my world as much as I enjoyed building it.</p>
+            <p className="text-xs sm:text-sm leading-relaxed font-medium">
+              Whether it&apos;s with code, paint, yarn, or a camera, I simply love creating things. Thank you for stopping by. I hope you enjoy exploring this little corner of my world as much as I enjoyed building it.
+            </p>
           </div>
 
-          <div className="flex-1 w-full flex justify-center md:justify-end mt-12 md:mt-0">
-            
-            <div className="relative w-full max-w-[400px] aspect-[3/4] group cursor-pointer">
-              
-              {/* 1. THE PHOTO */}
-              <div className="absolute inset-0 z-0 rounded-t-[300px] rounded-b-2xl overflow-hidden bg-[#EFE9DC] shadow-lg border border-[#DCD9CE]/60">
+          <div className="flex-1 w-full flex justify-center md:justify-end">
+            <div className="relative w-full max-w-[340px] p-6 bg-[#FAF7F2] rounded-3xl border-[3px] border-theme-dark shadow-solid">
+              <div className="w-full h-auto rounded-none overflow-hidden border-2 border-theme-dark bg-theme-cream p-1.5 shadow-inner">
                 <img 
                   src="/about/me.jpeg" 
                   alt="Akshita" 
-                  className="w-full h-full object-cover grayscale opacity-90 transition-all duration-700 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105" 
+                  className="w-full h-auto object-contain block rounded-none" 
                 />
               </div>
-
-              {/* 2. THE TOP-LEFT FLORAL CASCADE*/}
-              <div
-                className="absolute -top-14 -left-14 sm:-top-28 sm:-left-32 w-[60%] sm:w-[80%] h-[60%] sm:h-[80%] z-10 pointer-events-none scale-x-[-1] drop-shadow-sm"
-              >
-                <div 
-                  className="w-full h-full bg-[#7A8762]"
-                  style={{
-                    WebkitMaskImage: `url('/border/uppercorner.png')`,
-                    WebkitMaskSize: 'contain',
-                    WebkitMaskRepeat: 'no-repeat',
-                    WebkitMaskPosition: 'top left',
-                    maskImage: `url('/border/uppercorner.png')`,
-                    maskSize: 'contain',
-                    maskRepeat: 'no-repeat',
-                    maskPosition: 'top left'
-                  }}
-                ></div>
-              </div>
-
-              {/* 3. THE BOTTOM-RIGHT FLORAL CORNER*/}
-              <div
-                className="absolute -bottom-14 -right-14 sm:-bottom-32 sm:-right-40 w-[60%] sm:w-[85%] h-[60%] sm:h-[85%] z-10 pointer-events-none scale-x-[-1] drop-shadow-sm"
-              >
-                <div 
-                  className="w-full h-full bg-[#7A8762]"
-                  style={{
-                    WebkitMaskImage: `url('/border/lowercorner.png')`,
-                    WebkitMaskSize: 'contain',
-                    WebkitMaskRepeat: 'no-repeat',
-                    WebkitMaskPosition: 'bottom left', 
-                    maskImage: `url('/border/lowercorner.png')`,
-                    maskSize: 'contain',
-                    maskRepeat: 'no-repeat',
-                    maskPosition: 'bottom left'
-                  }}
-                ></div>
+              <div className="mt-3 text-center">
+                <span className="text-[10px] font-black uppercase tracking-widest text-theme-dark">
+                  Akshita Sharma • Himachal Pradesh
+                </span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* --- INTERACTIVE DESK --- */}
-        <section className="mb-32">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-6">
+        <section className="mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-3">
             <div>
-              <h2 className="text-4xl font-serif text-[#3E3A35] tracking-wide">My Photography</h2>
-              <p className="text-[#7A8762] font-serif italic mt-2 text-lg">
-                {isTidy ? 'A quiet, organized gallery. Drag a photo to break the rules.' : 'A scattered collection of moments. Grab, toss, and explore.'}
+              <span className="text-[10px] font-black uppercase tracking-widest text-theme-dark block mb-0.5">
+                VISUAL JOURNAL • ARCHIVE
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-theme-dark uppercase tracking-tight">PHOTOGRAPHY DESK</h2>
+              <p className="text-theme-dark/80 font-medium text-xs sm:text-sm">
+                {isTidy ? "Organized album grid. Drag photos to scatter them." : "Scattered moments from the hills. Grab, toss, and explore."}
               </p>
             </div>
             
             <button
                onClick={() => setIsTidy(!isTidy)}
-               className="px-6 py-2.5 rounded-full border border-[#7A8762] text-[#7A8762] font-semibold tracking-widest uppercase text-xs hover:bg-[#7A8762] hover:text-[#F7F3EB] transition-all duration-500 shadow-sm whitespace-nowrap active:scale-95"
+               className="px-5 py-2.5 rounded-full bg-theme-dark text-theme-cream font-black tracking-wider uppercase text-xs shadow-solid hover:bg-theme-orange hover:text-theme-dark transition-all whitespace-nowrap active:scale-95 cursor-pointer border-2 border-theme-dark"
             >
-               {isTidy ? 'Scatter Photos' : 'Tidy Gallery'}
+               {isTidy ? "Scatter Photos ~" : "Tidy Desk Grid"}
             </button>
           </div>
 
-          <div
-            className="relative w-full h-[70vh] min-h-[440px] sm:h-[75vh] sm:min-h-[650px] bg-[#EFE9DC] rounded-3xl overflow-hidden shadow-inner border border-[#C6B89E]/40"
-            style={{ touchAction: 'pan-y' }}
+          <div 
+            className="relative w-full h-[65vh] min-h-[550px] bg-[#E2D9CC] rounded-3xl overflow-hidden border-[3px] border-theme-dark shadow-solid" 
+            style={{ touchAction: "none" }} 
           >
             <div 
-              className="absolute inset-0 opacity-10 pointer-events-none" 
-              style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, #7A8762 31px, #7A8762 32px)' }} 
+              className="absolute inset-0 opacity-15 pointer-events-none" 
+              style={{ backgroundImage: "repeating-linear-gradient(transparent, transparent 27px, #2D2D2D 27px, #2D2D2D 28px)" }} 
             />
 
             {scatterItems.map((item, i) => (
@@ -313,15 +260,14 @@ export default function About() {
           </div>
         </section>
 
-        {/* --- FINAL QUOTE --- */}
-        <section className="text-center">
-          <h2 className="text-3xl font-serif text-[#7A8762] italic mb-6">"I'm still becoming."</h2>
-          <p className="text-[#514D48] max-w-md mx-auto font-serif">
+        <section className="text-center py-6 border-t-2 border-theme-dark/20">
+          <h2 className="text-xl sm:text-2xl text-theme-dark font-black uppercase tracking-tight mb-1">&ldquo;I&apos;M STILL BECOMING.&rdquo;</h2>
+          <p className="text-theme-dark/80 text-xs font-medium">
             Every line of code, brushstroke, and photograph adds a new page to the story.
           </p>
         </section>
-
       </div>
     </div>
   );
 }
+

@@ -1,24 +1,24 @@
-import React, { useState, useRef } from 'react';
-import { useIsMobile, useIsTouch } from '../../hooks/useMediaQuery';
+import { useState, useRef, useEffect, useCallback } from "react";
+
+import { Squiggle } from "../../components/decorative/BotanicalMotifs";
 
 const artworks = [
-  { id: 1, img: "/artworks/comission2.png" }, 
-  { id: 2, img: "/artworks/field.png" },  
-  { id: 3, img: "/artworks/cow.png" }, 
-  { id: 4, img: "/artworks/comission1.png" },
-  { id: 5, img: "/artworks/scenery.png" },
-  { id: 6, img: "/artworks/sadgirl.png" },
-  { id: 7, img: "/artworks/dog.png" },
-  { id: 8, img: "/artworks/dentist.png" },
-  { id: 9, img: "/artworks/skull.png" },
-  { id: 10, img: "/artworks/artbookpage.png" },
-  { id: 11, img: "/artworks/camel.png" },
-  { id: 12, img: "/artworks/comission3.png" },
-  { id: 13, img: "/artworks/artpage3.png"},
-  { id: 14, img: "/artworks/girlwithsheep.png" },
-  { id: 15, img: "/artworks/artpage2.png" },
-  { id: 15, img: "/artworks/forest.png" },
-
+  { id: 1, img: "/artworks/comission2.png", title: "Two Souls", medium: "Acrylic on Canvas" }, 
+  { id: 2, img: "/artworks/field.png", title: "Sunlit Meadow", medium: "Oil Impression" },  
+  { id: 3, img: "/artworks/cow.png", title: "Gentle Pastoral", medium: "Original Study" }, 
+  { id: 4, img: "/artworks/comission1.png", title: "Beloved Companions", medium: "Commissioned Portrait" },
+  { id: 5, img: "/artworks/scenery.png", title: "Whispering Waters", medium: "Landscape Study" },
+  { id: 6, img: "/artworks/sadgirl.png", title: "Melancholy Hues", medium: "Expressive Portrait" },
+  { id: 7, img: "/artworks/dog.png", title: "Faithful Gaze", medium: "Pet Portrait" },
+  { id: 8, img: "/artworks/dentist.png", title: "Atelier Concept", medium: "Creative Study" },
+  { id: 9, img: "/artworks/skull.png", title: "Anatomy of Light", medium: "Still Life" },
+  { id: 10, img: "/artworks/artbookpage.png", title: "Journal Musings", medium: "Sketchbook Archive" },
+  { id: 11, img: "/artworks/camel.png", title: "Golden Dunes", medium: "Warm Impression" },
+  { id: 12, img: "/artworks/comission3.png", title: "Classic Portraiture", medium: "Acrylic on A5" },
+  { id: 13, img: "/artworks/artpage3.png", title: "Botanical Sketches", medium: "Ink & Wash" },
+  { id: 14, img: "/artworks/girlwithsheep.png", title: "Hills of Kinnaur", medium: "Folk Impression" },
+  { id: 15, img: "/artworks/artpage2.png", title: "Raw Gestures", medium: "Sketch Study" },
+  { id: 16, img: "/artworks/forest.png", title: "Pines of Himachal", medium: "Palette Knife Oil" },
 ];
 
 const Portfolio = () => {
@@ -33,46 +33,59 @@ const Portfolio = () => {
   const artClickStartX = useRef(0);
   const artClickStartY = useRef(0);
 
-  const isMobile = useIsMobile();
-  const isTouch = useIsTouch();
-
   const isFocused = focusedIndex !== null;
+  
+  const radius = 3400; 
+  const angleSpacing = 15; 
+  const rowOffsetPx = 530; 
 
-  // Room dimensions calculated to handle forced massive scaling.
-  // On smaller viewports the room is drawn tighter so the same artworks fill a
-  // portrait screen and both rows stay in view; the drag-to-pan interaction is
-  // otherwise identical.
-  // Mobile: slightly smaller radius + tighter angular spacing so pieces sit closer
-  // without changing desktop geometry.
-  const radius = isMobile ? 1380 : 3200;
-  const angleSpacing = isMobile ? 8.5 : 15;
-  const rowOffsetPx = isMobile ? 170 : 450;
-
-  // The artworks occupy one arc of the cylinder. Tiling that arc around the full
-  // 360° means panning past the last piece wraps back to the first instead of
-  // revealing blank wall. 8 items/row × 15° = 120°, which divides 360° evenly,
-  // so the three copies meet with no visible seam.
-  const ringPeriod = Math.ceil(artworks.length / 2) * angleSpacing;
-  const ringCopies = Math.max(1, Math.round(360 / ringPeriod));
-  const ringOffsets = Array.from(
-    { length: ringCopies },
-    (_, k) => k - Math.floor(ringCopies / 2)
-  );
-
-  const getArtAngle = (index) => {
+  const getArtAngle = useCallback((index) => {
     const isTopRow = index % 2 === 0;
     const rowIndex = Math.floor(index / 2); 
     const rowOffset = isTopRow ? 0 : (angleSpacing / 2);
     const totalItemsInRow = Math.ceil(artworks.length / 2);
     const centerOffset = (totalItemsInRow * angleSpacing) / 2;
     return (rowIndex * angleSpacing) + rowOffset - centerOffset;
-  };
+  }, []);
+
+  const handleNext = useCallback(() => {
+    if (focusedIndex === null) return;
+    let newIndex = focusedIndex - 1;
+    if (newIndex < 0) newIndex = artworks.length - 1;
+    const newAngle = getArtAngle(newIndex);
+    setFocusedIndex(newIndex);
+    setPanAngle(-newAngle);
+  }, [focusedIndex, getArtAngle]);
+
+  const handlePrev = useCallback(() => {
+    if (focusedIndex === null) return;
+    let newIndex = focusedIndex + 1;
+    if (newIndex >= artworks.length) newIndex = 0;
+    const newAngle = getArtAngle(newIndex);
+    setFocusedIndex(newIndex);
+    setPanAngle(-newAngle);
+  }, [focusedIndex, getArtAngle]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!isFocused) return;
+      if (e.key === "ArrowLeft") {
+        handlePrev();
+      } else if (e.key === "ArrowRight") {
+        handleNext();
+      } else if (e.key === "Escape") {
+        setFocusedIndex(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isFocused, handleNext, handlePrev]);
 
   const handlePointerDown = (e) => {
     if (isFocused) return;
     isDragging.current = true;
     lastX.current = e.clientX || (e.touches ? e.touches[0].clientX : 0);
-    if (roomRef.current) roomRef.current.style.transition = 'none';
+    if (roomRef.current) roomRef.current.style.transition = "none";
   };
 
   const handlePointerMove = (e) => {
@@ -93,7 +106,7 @@ const Portfolio = () => {
 
   const handlePointerUp = () => {
     isDragging.current = false;
-    if (roomRef.current) roomRef.current.style.transition = 'transform 1.2s cubic-bezier(0.25, 1, 0.2, 1)';
+    if (roomRef.current) roomRef.current.style.transition = "transform 1.2s cubic-bezier(0.25, 1, 0.2, 1)";
   };
 
   const handleWheel = (e) => {
@@ -101,132 +114,169 @@ const Portfolio = () => {
     setPanAngle(prev => prev - e.deltaY * 0.05 - e.deltaX * 0.05);
   };
 
-  // Idle cursor-parallax is a mouse-only flourish — on touch there is no hover
-  // position, so it is disabled to keep the room from lurching on first touch.
-  const parallax = isTouch ? 0 : 1;
-  let targetRotY = panAngle + (mouse.x * 3 * parallax);
-  let targetRotX = mouse.y * 3 * parallax;
-
-  // Pushing the camera physically closer to the walls by default
-  let targetZ = isMobile ? 1100 : 1200;
-  let targetY = 0;
+  let targetRotY = panAngle + (mouse.x * 3); 
+  let targetRotX = mouse.y * 3;
+  
+  let targetZ = 1200; 
+  let targetY = 0; 
 
   if (isFocused) {
     const isTopRow = focusedIndex % 2 === 0;
-    targetRotY = panAngle;
-    targetRotX = 0;
-
-    // Zoom drops you right in front of the massive canvas
-    targetZ = isMobile ? 2100 : 2600;
-    targetY = isTopRow ? rowOffsetPx : -rowOffsetPx;
+    targetRotY = panAngle; 
+    targetRotX = 0;        
+    targetZ = 2700; 
+    targetY = isTopRow ? rowOffsetPx : -rowOffsetPx; 
   }
 
   return (
-    <div 
-      className="relative w-full h-[82vh] min-h-[520px] md:h-[85vh] md:min-h-[700px] overflow-hidden box-border bg-[#F5F3EB] text-[#2B3024] font-sans selection:bg-[#7A8B5F] cursor-grab active:cursor-grabbing"
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerLeave={handlePointerUp}
-      onPointerCancel={handlePointerUp}
-      onWheel={handleWheel}
-      style={{
-        // Let vertical swipes scroll the page past the room; horizontal drags
-        // still pan the exhibition. Prevents the room becoming a scroll trap.
-        // While zoomed into a single piece it's a lightbox, so lock scrolling.
-        touchAction: isFocused ? 'none' : 'pan-y',
-        clipPath: 'inset(0)',
-        contain: 'paint layout'
-      }}
-    >
-      
-      {/* Texture Overlay */}
-      <div 
-        className="pointer-events-none absolute inset-0 w-full h-full z-50 opacity-[0.35] mix-blend-multiply"
-        style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E")` 
-        }}
-      />
+    <div className="w-full min-h-screen bg-theme-cream text-theme-dark font-sans selection:bg-theme-olive selection:text-theme-dark pb-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-5 sm:pt-6 mb-4 sm:mb-5">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-1.5">
+              <span className="px-3 py-0.5 bg-theme-orange text-theme-dark text-[10px] font-black uppercase tracking-widest rounded-full border-2 border-theme-dark shadow-[2px_2px_0px_#2D2D2D]">
+                INTERACTIVE 3D EXHIBITION
+              </span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-theme-dark uppercase tracking-tight">
+              STUDIO ARCHIVES & COLLECTION
+            </h1>
+            <div className="pt-0.5">
+              <Squiggle className="w-16 h-2" color="#2D2D2D" />
+            </div>
+          </div>
 
-      <div className={`absolute top-0 left-0 w-full p-5 sm:p-8 z-40 flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-start transition-opacity duration-700 pointer-events-none ${isFocused ? 'opacity-0' : 'opacity-100'}`}>
-        <div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter text-[#2B3024]">My Collection</h1>
-          <p className="text-[#7A8B5F] font-medium tracking-widest uppercase text-xs sm:text-sm mt-1">Interactive Exhibition</p>
-        </div>
-        <div className="sm:text-right text-[#B4B4A8] text-[10px] sm:text-sm tracking-widest sm:max-w-[200px] leading-relaxed">
-          {isTouch ? <>DRAG TO PAN THE ROOM. <br/>TAP ARTWORK TO VIEW.</> : <>DRAG BACKGROUND TO PAN. <br/>CLICK ARTWORK TO VIEW.</>}
+          <div className="text-right text-theme-dark text-[10px] tracking-wider font-black max-w-[240px] leading-relaxed hidden sm:block bg-[#FAF7F2] p-3 rounded-2xl border-2 border-theme-dark shadow-solid">
+            DRAG TO ROTATE THROUGH GALLERY. <br />
+            <span className="underline">CLICK TO INSPECT.</span>
+          </div>
         </div>
       </div>
 
-      <button
-        onClick={(e) => {
+      <div 
+        className="relative w-full h-[84vh] min-h-[700px] overflow-hidden box-border bg-[#ECE8DF] border-y-[3px] border-theme-dark cursor-grab active:cursor-grabbing select-none"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerUp}
+        onWheel={handleWheel}
+        style={{ 
+          touchAction: "none",
+          clipPath: "inset(0)", 
+          contain: "paint layout"
+        }} 
+      >
+        <div 
+          className="pointer-events-none absolute inset-0 w-full h-full z-0 opacity-15"
+          style={{ 
+            backgroundImage: `linear-gradient(to right, #2D2D2D 1px, transparent 1px), linear-gradient(to bottom, #2D2D2D 1px, transparent 1px)`,
+            backgroundSize: "32px 32px"
+          }}
+        />
+
+        <button
+          onClick={(e) => {
             e.stopPropagation();
             setFocusedIndex(null);
-        }}
-        className={`absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 z-40 px-10 py-4 bg-[#2B3024] text-[#F5F3EB] rounded-full tracking-widest text-sm uppercase shadow-2xl transition-all duration-700 hover:bg-[#7A8B5F] hover:scale-105 pointer-events-auto ${isFocused ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}
-      >
-        Step Back
-      </button>
-
-      <div className="w-full h-full pointer-events-none" style={{ perspective: '1100px' }}>
-        <div 
-          ref={roomRef}
-          className="relative w-full h-full will-change-transform pointer-events-none"
-          style={{
-            transformStyle: 'preserve-3d',
-            transform: `translate3d(0px, ${targetY}px, ${targetZ}px) rotateX(${targetRotX}deg) rotateY(${targetRotY}deg)`,
-            transition: 'transform 1.2s cubic-bezier(0.25, 1, 0.2, 1)' 
           }}
+          className={`absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-40 px-6 py-2.5 bg-theme-dark text-theme-cream rounded-full tracking-wider text-xs font-black uppercase shadow-solid hover:bg-theme-orange hover:text-theme-dark transition-all pointer-events-auto border-2 border-theme-dark cursor-pointer ${
+            isFocused ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none"
+          }`}
         >
-          {ringOffsets.map((ring) =>
-            artworks.map((art, i) => {
-              const angle = getArtAngle(i) + ring * ringPeriod;
-              const isTopRow = i % 2 === 0;
-              const randomTilt = ((i % 4) - 1.5);
+          ← Step Back to Exhibition
+        </button>
 
+        <div className="w-full h-full pointer-events-none" style={{ perspective: "1100px" }}>
+          <div 
+            ref={roomRef}
+            className="relative w-full h-full will-change-transform pointer-events-none"
+            style={{
+              transformStyle: "preserve-3d",
+              transform: `translate3d(0px, ${targetY}px, ${targetZ}px) rotateX(${targetRotX}deg) rotateY(${targetRotY}deg)`,
+              transition: "transform 1.2s cubic-bezier(0.25, 1, 0.2, 1)" 
+            }}
+          >
+            {artworks.map((art, i) => {
+              const angle = getArtAngle(i);
+              const isTopRow = i % 2 === 0;
+              const randomTilt = ((i % 4) - 1.5); 
+              
               return (
-                <div
-                  key={`${ring}:${i}`}
-                  className={`absolute top-1/2 left-1/2 group pointer-events-none transition-opacity duration-1000 ${isFocused && focusedIndex !== i ? 'opacity-20' : 'opacity-100'}`}
+                <div 
+                  key={art.id}
+                  className={`absolute top-1/2 left-1/2 group pointer-events-none transition-opacity duration-1000 ${isFocused && focusedIndex !== i ? "opacity-20" : "opacity-100"}`}
                   style={{
                     transform: `translate(-50%, -50%) rotateY(${angle}deg) translateZ(${-radius}px) translateY(${isTopRow ? -rowOffsetPx : rowOffsetPx}px) rotateZ(${randomTilt}deg)`,
-                    transformStyle: 'preserve-3d',
+                    transformStyle: "preserve-3d",
                   }}
                 >
-                  <div
-                    className={`bg-[#FAFAFA] p-2 sm:p-3 md:p-5 shadow-[0_40px_80px_rgba(43,48,36,0.15)] transition-transform duration-700 pointer-events-auto cursor-pointer ${!isFocused && 'hover:-translate-y-4 hover:scale-[1.04]'}`}
-
+                  <div 
+                    className={`relative bg-[#FAF7F2] p-3 sm:p-4 rounded-2xl border-[3px] border-theme-dark shadow-solid transition-transform duration-500 pointer-events-auto cursor-pointer ${!isFocused && "hover:-translate-y-3 hover:scale-[1.03]"}`}
+                    
                     onPointerDown={(e) => {
-                      e.stopPropagation();
+                      e.stopPropagation(); 
                       artClickStartX.current = e.clientX || (e.touches ? e.touches[0].clientX : 0);
                       artClickStartY.current = e.clientY || (e.touches ? e.touches[0].clientY : 0);
                     }}
-
+                    
                     onPointerUp={(e) => {
                       e.stopPropagation();
                       const clientX = e.clientX || (e.changedTouches ? e.changedTouches[0].clientX : 0);
                       const clientY = e.clientY || (e.changedTouches ? e.changedTouches[0].clientY : 0);
-
+                      
                       const movedX = Math.abs(clientX - artClickStartX.current);
                       const movedY = Math.abs(clientY - artClickStartY.current);
-                      if (movedX > 5 || movedY > 5) return;
-
+                      if (movedX > 5 || movedY > 5) return; 
+                      
                       setFocusedIndex(i);
                       setPanAngle(-angle);
                     }}
                   >
-                    <img
-                      src={art.img}
-                      alt={art.title || "Artwork"}
-                      className="block w-auto max-w-[min(72vw,280px)] sm:max-w-[min(70vw,340px)] md:max-w-none h-auto max-h-[260px] sm:max-h-[340px] md:max-h-[450px] lg:max-h-[600px] object-contain shadow-inner pointer-events-none"
-                      draggable="false"
-                      decoding="async"
-                    />
+                    <div className="overflow-hidden bg-[#ECE8DF] border-2 border-theme-dark/40 p-2 shadow-inner flex items-center justify-center">
+                      <img 
+                        src={art.img} 
+                        alt="Artwork" 
+                        className="w-auto h-[380px] sm:h-[480px] md:h-[580px] lg:h-[680px] max-w-[85vw] pointer-events-none object-contain block rounded-none filter contrast-[1.02]"
+                        draggable="false" 
+                      />
+                    </div>
+
+                    {isFocused && focusedIndex === i && (
+                      <>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlePrev();
+                          }}
+                          className="absolute -left-4 sm:-left-6 md:-left-8 top-1/2 -translate-y-1/2 z-50 p-2 sm:p-2.5 bg-[#FAF7F2] text-theme-dark rounded-full shadow-solid hover:bg-theme-orange transition-all border-2 border-theme-dark cursor-pointer pointer-events-auto flex items-center justify-center hover:scale-110 active:scale-95"
+                          aria-label="Previous Artwork"
+                          title="Previous (←)"
+                        >
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                          </svg>
+                        </button>
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleNext();
+                          }}
+                          className="absolute -right-4 sm:-right-6 md:-right-8 top-1/2 -translate-y-1/2 z-50 p-2 sm:p-2.5 bg-[#FAF7F2] text-theme-dark rounded-full shadow-solid hover:bg-theme-orange transition-all border-2 border-theme-dark cursor-pointer pointer-events-auto flex items-center justify-center hover:scale-110 active:scale-95"
+                          aria-label="Next Artwork"
+                          title="Next (→)"
+                        >
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                          </svg>
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               );
-            })
-          )}
+            })}
+          </div>
         </div>
       </div>
     </div>
