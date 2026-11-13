@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../../utils/firebase.config.js'; 
+import { useState } from "react";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+
+import { db } from "../../utils/firebase.config.js"; 
+import { Squiggle } from "../../components/decorative/BotanicalMotifs";
 
 export default function ReviewForm() {
   const [formData, setFormData] = useState({
-    name: '',
-    relation: '',
-    message: ''
+    name: "",
+    relation: "",
+    message: ""
   });
-  const [status, setStatus] = useState('idle'); // 'idle', 'submitting', 'success', 'error'
+  const [status, setStatus] = useState("idle");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,70 +18,62 @@ export default function ReviewForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus('submitting');
+    setStatus("submitting");
 
     try {
-      await addDoc(collection(db, 'reviews'), {
+      await addDoc(collection(db, "reviews"), {
         name: formData.name,
         relation: formData.relation,
         message: formData.message,
         createdAt: serverTimestamp() 
       });
 
-      setStatus('success');
-      setFormData({ name: '', relation: '', message: '' }); 
-      
-      setTimeout(() => setStatus('idle'), 5000);
+      setStatus("success");
+      setFormData({ name: "", relation: "", message: "" }); 
+      setTimeout(() => setStatus("idle"), 5000);
       
     } catch (error) {
       console.error("Error adding review: ", error);
-      setStatus('error');
+      setStatus("error");
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F3EB] text-[#3E3A35] font-sans selection:bg-[#7A8762] selection:text-[#F7F3EB] pt-24 sm:pt-32 pb-24 flex justify-center items-center">
-      
-      {/* Background Texture */}
-      <div 
-        className="pointer-events-none fixed inset-0 z-50 opacity-[0.25] mix-blend-multiply"
-        style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E")` 
-        }}
-      />
+    <div className="min-h-screen bg-theme-cream text-theme-dark font-sans selection:bg-theme-olive selection:text-theme-dark pt-6 pb-12 flex justify-center items-center relative overflow-hidden">
+      <div className="w-full max-w-xl px-6 relative z-10">
+        <div className="text-center mb-5 space-y-1">
+          <div className="inline-flex items-center gap-1.5">
+            <span className="px-3 py-0.5 bg-theme-orange text-theme-dark text-[10px] font-black uppercase tracking-widest rounded-full border-2 border-theme-dark shadow-[2px_2px_0px_#2D2D2D]">
+              STUDIO GUESTBOOK • GUEST NOTES
+            </span>
+          </div>
 
-      <div className="w-full max-w-2xl px-6 relative z-10">
-        
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-serif tracking-widest uppercase mb-4 text-[#3E3A35]">
-            Leave a Note
+          <h1 className="text-3xl sm:text-4xl font-black text-theme-dark uppercase tracking-tight">
+            LEAVE A NOTE
           </h1>
-          <p className="text-[#7A8762] font-serif italic text-lg">
-            A private space to share your thoughts, feedback, or just a kind word.
+
+          <div className="flex justify-center my-1.5">
+            <Squiggle className="w-16 h-2" color="#2D2D2D" />
+          </div>
+
+          <p className="text-theme-dark/80 font-medium text-sm">
+            Share your thoughts, impressions, or just a kind word.
           </p>
         </div>
 
-        {/* The Paper Form */}
-        <div className="relative bg-[#FAFAFA] p-8 md:p-12 shadow-sm border border-[#DCD9CE]/60 rounded-sm">
-          
-          {/* Decorative Tape */}
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-[#EFE9DC] border border-[#DCD9CE] shadow-sm rotate-2 z-20"></div>
-
-          {status === 'success' ? (
-            <div className="text-center py-16 animate-pulse">
-              <div className="text-4xl text-[#7A8762] mb-4">❦</div>
-              <h2 className="text-2xl font-serif text-[#3E3A35]">Thank you.</h2>
-              <p className="text-[#514D48] mt-2">Your note has been securely delivered.</p>
+        <div className="relative bg-[#FAF7F2] p-6 sm:p-8 rounded-3xl border-[3px] border-theme-dark shadow-solid">
+          {status === "success" ? (
+            <div className="text-center py-12 space-y-2">
+              <div className="text-3xl text-theme-dark">✿</div>
+              <h2 className="text-2xl font-black text-theme-dark uppercase">THANK YOU SO MUCH.</h2>
+              <p className="text-theme-dark/80 text-xs font-medium">Your note has been securely pinned to the studio wall.</p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Name Field */}
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-xs uppercase tracking-widest text-[#7A8762] font-semibold">
-                    Name
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label htmlFor="name" className="text-[10px] font-black uppercase tracking-wider text-theme-dark">
+                    Your Name
                   </label>
                   <input
                     type="text"
@@ -88,15 +82,14 @@ export default function ReviewForm() {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full bg-transparent border-b border-[#DCD9CE] py-2 px-1 focus:outline-none focus:border-[#7A8762] transition-colors text-[#514D48] placeholder-[#C6B89E]"
-                    placeholder="Jane Doe"
+                    className="w-full bg-theme-cream rounded-xl px-3 py-2 text-xs text-theme-dark border-2 border-theme-dark focus:outline-none focus:ring-2 focus:ring-theme-olive font-medium"
+                    placeholder="e.g. Jane Doe"
                   />
                 </div>
 
-                {/* Relationship Field */}
-                <div className="space-y-2">
-                  <label htmlFor="relation" className="text-xs uppercase tracking-widest text-[#7A8762] font-semibold">
-                    Context / Role
+                <div className="space-y-1">
+                  <label htmlFor="relation" className="text-[10px] font-black uppercase tracking-wider text-theme-dark">
+                    Context / Connection
                   </label>
                   <input
                     type="text"
@@ -104,45 +97,41 @@ export default function ReviewForm() {
                     name="relation"
                     value={formData.relation}
                     onChange={handleChange}
-                    className="w-full bg-transparent border-b border-[#DCD9CE] py-2 px-1 focus:outline-none focus:border-[#7A8762] transition-colors text-[#514D48] placeholder-[#C6B89E]"
-                    placeholder="Client, Colleague, Friend..."
+                    className="w-full bg-theme-cream rounded-xl px-3 py-2 text-xs text-theme-dark border-2 border-theme-dark focus:outline-none focus:ring-2 focus:ring-theme-olive font-medium"
+                    placeholder="Collector, Friend, Visitor..."
                   />
                 </div>
               </div>
 
-              {/* Message Field */}
-              <div className="space-y-2 pt-4">
-                <label htmlFor="message" className="text-xs uppercase tracking-widest text-[#7A8762] font-semibold">
+              <div className="space-y-1">
+                <label htmlFor="message" className="text-[10px] font-black uppercase tracking-wider text-theme-dark">
                   Your Note
                 </label>
                 <textarea
                   id="message"
                   name="message"
                   required
-                  rows="5"
+                  rows="4"
                   value={formData.message}
                   onChange={handleChange}
-                  className="w-full bg-transparent border-b border-[#DCD9CE] py-2 px-1 focus:outline-none focus:border-[#7A8762] transition-colors text-[#514D48] resize-none placeholder-[#C6B89E]"
-                  placeholder="Write your thoughts here..."
-                ></textarea>
+                  className="w-full bg-theme-cream rounded-xl px-3 py-2 text-xs text-theme-dark border-2 border-theme-dark focus:outline-none focus:ring-2 focus:ring-theme-olive resize-none font-medium"
+                  placeholder="Leave a thought, a quote, or warm wishes..."
+                />
               </div>
 
-              {/* Error Message */}
-              {status === 'error' && (
-                <p className="text-red-500/80 text-sm italic font-serif">Something went wrong. Please try again.</p>
+              {status === "error" && (
+                <p className="text-red-700 text-xs font-black">Something went wrong. Please try again.</p>
               )}
 
-              {/* Submit Button */}
-              <div className="pt-8 text-center md:text-right">
+              <div className="pt-2 text-right">
                 <button
                   type="submit"
-                  disabled={status === 'submitting'}
-                  className="px-8 py-3 rounded-full border border-[#7A8762] text-[#7A8762] font-semibold tracking-widest uppercase text-xs hover:bg-[#7A8762] hover:text-[#F7F3EB] transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={status === "submitting"}
+                  className="px-6 py-2.5 rounded-full bg-theme-dark text-theme-cream font-black tracking-wider uppercase text-xs shadow-solid hover:bg-theme-orange hover:text-theme-dark transition-all disabled:opacity-50 cursor-pointer active:scale-95 border-2 border-theme-dark"
                 >
-                  {status === 'submitting' ? 'Sending...' : 'Send Note'}
+                  {status === "submitting" ? "Pinning..." : "Send Note ✨"}
                 </button>
               </div>
-
             </form>
           )}
         </div>

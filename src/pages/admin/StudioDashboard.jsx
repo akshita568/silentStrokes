@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
+
 import { db } from "../../utils/firebase.config"; 
 import { AuthContext } from "../../AuthProvider/AuthProvider"; 
 
@@ -20,7 +21,6 @@ const StudioDashboard = () => {
 
   const isAdmin = user?.email?.toLowerCase() === "sakshita229@gmail.com";
 
-  // Fetch data based on which tab is active
   useEffect(() => {
     if (!isAdmin) return;
 
@@ -66,7 +66,7 @@ const StudioDashboard = () => {
     }
   };
 
-  if (isLoading) return <div className="min-h-screen bg-base-white"></div>;
+  if (isLoading) return <div className="min-h-screen bg-base-white" />;
 
   if (!isAdmin) {
     return (
@@ -104,8 +104,6 @@ const StudioDashboard = () => {
   return (
     <div className="min-h-screen bg-sand/10 p-8 md:p-12 font-sans text-text-main pt-24">
       <div className="max-w-6xl mx-auto">
-        
-        {/* Header & Logout */}
         <div className="flex justify-between items-end mb-8 border-b border-sand pb-4">
           <div>
             <h1 className="text-3xl font-serif">Studio Dashboard</h1>
@@ -116,7 +114,6 @@ const StudioDashboard = () => {
           </button>
         </div>
 
-        {/* Tab Navigation */}
         <div className="flex space-x-6 mb-8 border-b border-sand/50">
           {["commissions", "inquiries", "users"].map((tab) => (
             <button
@@ -133,10 +130,8 @@ const StudioDashboard = () => {
           ))}
         </div>
 
-        {/* Loading State for Tabs */}
         {fetching && <p className="text-sm text-olive animate-pulse font-bold uppercase tracking-widest mb-10">Loading data...</p>}
 
-        {/* TAB 1: COMMISSIONS */}
         {!fetching && activeTab === "commissions" && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {commissions.length === 0 ? <p className="text-sm text-dove p-4 border border-sand bg-base-white w-full col-span-full">No commission requests yet.</p> : null}
@@ -151,14 +146,13 @@ const StudioDashboard = () => {
                 <div className="text-sm text-dove space-y-2 mb-4 flex-grow">
                   <p><strong>Size:</strong> {req.size}</p>
                   <p><strong>Medium:</strong> {req.medium}</p>
-                  {req.vision && <div className="pt-3 mt-3 border-t border-sand/50"><p className="italic">"{req.vision}"</p></div>}
+                  {req.vision && <div className="pt-3 mt-3 border-t border-sand/50"><p className="italic">&ldquo;{req.vision}&rdquo;</p></div>}
                 </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* TAB 2: INQUIRIES */}
         {!fetching && activeTab === "inquiries" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {inquiries.length === 0 ? <p className="text-sm text-dove p-4 border border-sand bg-base-white w-full col-span-full">No inquiries received yet.</p> : null}
@@ -166,17 +160,16 @@ const StudioDashboard = () => {
               <div key={msg.id} className="bg-base-white p-6 border border-sand shadow-sm rounded-sm">
                 <h3 className="font-semibold text-lg">{msg.name}</h3>
                 <a href={`mailto:${msg.email}`} className="text-[11px] text-olive hover:underline">{msg.email}</a>
-                <p className="mt-4 text-sm text-dove italic">"{msg.message || msg.note}"</p>
+                <p className="mt-4 text-sm text-dove italic">&ldquo;{msg.message || msg.note}&rdquo;</p>
               </div>
             ))}
           </div>
         )}
 
-        {/* TAB 3: USERS */}
         {!fetching && activeTab === "users" && (
           <div className="bg-base-white border border-sand rounded-sm overflow-hidden shadow-sm">
             {usersList.length === 0 ? (
-              <p className="text-sm text-dove p-6">No users found. Make sure user data is saving to a "users" Firestore collection upon registration.</p>
+              <p className="text-sm text-dove p-6">No users found. Make sure user data is saving to a &quot;users&quot; Firestore collection upon registration.</p>
             ) : (
               <table className="w-full text-left text-sm">
                 <thead className="bg-sand/20 text-xs uppercase tracking-widest text-dove">

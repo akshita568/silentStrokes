@@ -6,10 +6,11 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
-  onAuthStateChanged,
+  onAuthStateChanged
 } from "firebase/auth";
-import { app, db } from "../utils/firebase.config"; 
 import { doc, getDoc, setDoc } from "firebase/firestore";
+
+import { app, db } from "../utils/firebase.config";
 
 export const AuthContext = createContext();
 
@@ -24,11 +25,9 @@ export const AuthProvider = ({ children }) => {
       const result = await signInWithPopup(auth, googleProvider);
       const loggedInUser = result.user;
 
-      // Check if this user already exists in your Firestore "users" collection
       const userRef = doc(db, "users", loggedInUser.uid);
       const userSnap = await getDoc(userRef);
 
-      // If they DO NOT exist, create a new profile for them
       if (!userSnap.exists()) {
         await setDoc(userRef, {
           name: loggedInUser.displayName || "Google User",
@@ -73,7 +72,7 @@ export const AuthProvider = ({ children }) => {
     login,
     signUp,
     logout,
-    googleLogin,
+    googleLogin
   };
 
   return (
